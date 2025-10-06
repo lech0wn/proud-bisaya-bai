@@ -120,7 +120,7 @@ export default function blogPage () {
                         style={{ userSelect: 'none' }}
                     >
                         {/* Blog Card 1 */}
-                        <div className="min-w-[250px] bg-white rounded-lg shadow-md overflow-hidden">
+                        <div className="min-w-[220px] bg-white rounded-lg shadow-md overflow-hidden">
                             <div className="relative w-full h-61">
                                 <Image
                                     src="/images/articles.png"
@@ -132,7 +132,7 @@ export default function blogPage () {
                             </div>
                         </div>
                         {/* Blog Card 2 */}
-                         <div className="min-w-[250px] bg-white rounded-lg shadow-md overflow-hidden">
+                         <div className="min-w-[220px] bg-white rounded-lg shadow-md overflow-hidden">
                             <div className="relative w-full h-61">
                                 <Image
                                     src="/images/articles2.png"
@@ -144,7 +144,7 @@ export default function blogPage () {
                             </div>
                         </div>
                         {/* Blog Card 3 */}
-                         <div className="min-w-[250px] bg-white rounded-lg shadow-md overflow-hidden">
+                         <div className="min-w-[220px] bg-white rounded-lg shadow-md overflow-hidden">
                             <div className="relative w-full h-61">
                                 <Image
                                     src="/images/articles3.png"
@@ -156,7 +156,7 @@ export default function blogPage () {
                             </div>
                         </div>
                         {/* Blog Card 4 */}
-                         <div className="min-w-[250px] bg-white rounded-lg shadow-md overflow-hidden">
+                         <div className="min-w-[220px] bg-white rounded-lg shadow-md overflow-hidden">
                             <div className="relative w-full h-61">
                                 <Image
                                     src="/images/articles4.png"
@@ -168,7 +168,7 @@ export default function blogPage () {
                             </div>
                         </div>
                         {/* Blog Card 5*/}
-                         <div className="min-w-[250px] bg-white rounded-lg shadow-md overflow-hidden">
+                         <div className="min-w-[220px] bg-white rounded-lg shadow-md overflow-hidden">
                             <div className="relative w-full h-61">
                                 <Image
                                     src="/images/articles4.png"
