@@ -1,13 +1,3 @@
-import Image from "next/image";
-
-export default function Home() {
-
-  const setNewView = async () =>(
-     console.log('new view')
-  );
-
-  setNewView();
-  return (
-    <div>hello</div>
-  );
+export default function Home(){
+  return <div>you are logged in</div>
 }
