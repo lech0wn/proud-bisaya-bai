@@ -62,12 +62,12 @@ export default function blogPage () {
             </div>
 
             {/* You May Also Like Section*/}
-            <section className="max-w-5xl mx-auto p-8 grid grid-cols-2 gap-8 items-start">
+            <section className="max-w-[1600px] mx-auto px-12 py-8 grid grid-cols-2 gap-8 items-start">
 
              {/* Left column: Title and images */}
             <div>
-                <h1 className="text-4xl text-black font-bold mb-4">Lorem Ipsum title goes here</h1>
-                <p className="text-gray-600 mb-6">Mhart Nuera<br />Sept 27, 2025</p>
+                <h1 className="text-4xl text-black font-bold mb-4">Lorem Ipsum title goes here Lorem Ipsum title goes here</h1>
+                <p className="text-gray-600 mb-6">Mharty mjart<br />Sept 27, 2025</p>
                 <Image
                     src="/images/vac_spot2.png"
                     alt="blog Header"
