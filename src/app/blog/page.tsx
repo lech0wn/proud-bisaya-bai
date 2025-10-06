@@ -185,7 +185,7 @@ export default function blogPage () {
             
             {/* Footer */}
             <footer className="bg-black text-white py-6 mt-8">
-                <div className="max-w-5xl mx-auto grid grid-cols-3 gap-8 items-start">
+                <div className="max-w-5xl mx-auto grid grid-cols-[1.5fr_1.5fr_.5fr] gap-8 items-start">
                 {/* Newsletter - left side */}
                 <div className="pr-8">
                     <h3 className="text-lg font-bold mb-2">Subscribe to our Newsletter</h3>
@@ -240,7 +240,7 @@ export default function blogPage () {
                             <li>Stories</li>
                             <li>destination</li>
                             <li>Food</li>
-                            <li>Lifestyle</li>
+                            <li>News and Entertainment</li>
                         </ul>
                     </div>
                     <div>
