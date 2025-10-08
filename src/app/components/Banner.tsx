@@ -1,10 +1,10 @@
-import React from "react";
+import React from "react"
 
 const Banner: React.FC = () => {
   return (
     <div
       className="relative h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/hero_image.png')" }}
+      style={{ backgroundImage: "url('/images/hero_image.webp')" }}
     >
       {/* Overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
@@ -23,7 +23,7 @@ const Banner: React.FC = () => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Banner;
+export default Banner

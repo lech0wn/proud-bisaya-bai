@@ -1,6 +1,6 @@
-import Head from "next/head";
-import React from "react";
-import Footer from "@/app/components/Footer";
+import Head from "next/head"
+import React from "react"
+import Footer from "@/app/components/Footer"
 
 const Home: React.FC = () => {
   const stories = [
@@ -16,7 +16,7 @@ const Home: React.FC = () => {
       title: "Food and Culture",
       image: "/images/food.jpg",
     },
-  ];
+  ]
 
   const articles = [
     {
@@ -39,7 +39,7 @@ const Home: React.FC = () => {
       date: "Oct 1, 2025",
       image: "/images/story4.jpg",
     },
-  ];
+  ]
 
   const breakingNews = [
     {
@@ -50,7 +50,7 @@ const Home: React.FC = () => {
       title: "TRAFFIC ALERT: Flooding in N. Busay Road",
       time: "10:15 AM",
     },
-  ];
+  ]
 
   const latestUpdates = [
     {
@@ -68,7 +68,7 @@ const Home: React.FC = () => {
       date: "Sept 27, 2025",
       image: "/images/latest3.jpg",
     },
-  ];
+  ]
 
   const editorsPicks = [
     {
@@ -86,7 +86,7 @@ const Home: React.FC = () => {
       date: "Sept 27, 2025",
       image: "/images/pick3.jpg",
     },
-  ];
+  ]
 
   return (
     <div>
@@ -102,12 +102,11 @@ const Home: React.FC = () => {
       <main>
         {/* Hero Banner */}
         <div
-          className="relative h-screen bg-cover bg-center"
-          style={{ backgroundImage: "url('/images/hero_image.png')" }}
+          className="relative h-screen bg-cover bg-center "
+          style={{ backgroundImage: "url('/images/hero_image.webp')" }}
         >
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-
+          {/* Overlay
+          <div className="absolute inset-0 bg-black bg-opacity-50"></div> */}
           {/* Content */}
           <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4">
             <h1 className="text-5xl md:text-6xl font-bold">
@@ -274,7 +273,7 @@ const Home: React.FC = () => {
         <Footer />
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

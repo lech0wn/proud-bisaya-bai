@@ -1,53 +1,54 @@
-"use client";
+"use client"
 
-import React, { useRef } from "react";
-import Image from "next/image";
-import Footer from "@/app/components/Footer";
+import React, { useRef } from "react"
+import Image from "next/image"
+import Footer from "@/app/components/Footer"
 
 export default function blogPage() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  let isDown = false;
-  let startX = 0;
-  let scrollLeft = 0;
+  const scrollRef = useRef<HTMLDivElement>(null)
+  let isDown = false
+  let startX = 0
+  let scrollLeft = 0
 
   // Mouse event handlers for drag-to-scroll
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    isDown = true;
-    startX = e.pageX - (scrollRef.current?.offsetLeft ?? 0);
-    scrollLeft = scrollRef.current?.scrollLeft ?? 0;
-    document.body.style.cursor = "grabbing";
-  };
+    isDown = true
+    startX = e.pageX - (scrollRef.current?.offsetLeft ?? 0)
+    scrollLeft = scrollRef.current?.scrollLeft ?? 0
+    document.body.style.cursor = "grabbing"
+  }
 
   const handleMouseLeave = () => {
-    isDown = false;
-    document.body.style.cursor = "default";
-  };
+    isDown = false
+    document.body.style.cursor = "default"
+  }
 
   const handleMouseUp = () => {
-    isDown = false;
-    document.body.style.cursor = "default";
-  };
+    isDown = false
+    document.body.style.cursor = "default"
+  }
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - (scrollRef.current?.offsetLeft ?? 0);
-    const walk = x - startX;
+    if (!isDown) return
+    e.preventDefault()
+    const x = e.pageX - (scrollRef.current?.offsetLeft ?? 0)
+    const walk = x - startX
     if (scrollRef.current) {
-      scrollRef.current.scrollLeft = scrollLeft - walk;
+      scrollRef.current.scrollLeft = scrollLeft - walk
     }
-  };
+  }
 
   return (
     <main className="bg-white min-h-screen">
       {/* Navigation Bar */}
       <div className="w-full h-64 relative">
-        <Image
-          src="/images/vac_spot1.png"
-          alt="blog Header"
-          layout="fill"
-          objectFit="cover"
-        />
+        <div className="w-full h-64 relative overflow-hidden">
+          <img
+            src="/images/vac_spot1.webp"
+            alt="blog Header"
+            className="w-full h-full object-cover"
+          />
+        </div>
       </div>
 
       {/* You May Also Like Section*/}
@@ -62,15 +63,15 @@ export default function blogPage() {
             <br />
             Sept 27, 2025
           </p>
-          <Image
-            src="/images/vac_spot2.png"
+          <img
+            src="/images/vac_spot2.webp"
             alt="blog Header"
             width={400}
             height={250}
             className="rounded-lg mb-6"
           />
-          <Image
-            src="/images/ads_placeholder.png"
+          <img
+            src="/images/ads_placeholder.webp"
             alt="Ads"
             width={400}
             height={100}
@@ -130,60 +131,50 @@ export default function blogPage() {
             {/* Blog Card 1 */}
             <div className="min-w-[220px] bg-white rounded-lg shadow-md overflow-hidden">
               <div className="relative w-full h-61">
-                <Image
-                  src="/images/articles.png"
+                <img
+                  src="/images/articles.webp"
                   alt="45 Minutes Nalang Mu Adto Sa Bantayan"
-                  fill
-                  style={{ objectFit: "cover" }}
-                  className="rounded-t-lg"
+                  className="w-full h-full object-cover rounded-t-lg"
                 />
               </div>
             </div>
             {/* Blog Card 2 */}
             <div className="min-w-[220px] bg-white rounded-lg shadow-md overflow-hidden">
               <div className="relative w-full h-61">
-                <Image
-                  src="/images/articles2.png"
+                <img
+                  src="/images/articles2.webp"
                   alt="45 Minutes Nalang Mu Adto Sa Bantayan"
-                  fill
-                  style={{ objectFit: "cover" }}
-                  className="rounded-t-lg"
+                  className="w-full h-full object-cover rounded-t-lg"
                 />
               </div>
             </div>
             {/* Blog Card 3 */}
             <div className="min-w-[220px] bg-white rounded-lg shadow-md overflow-hidden">
               <div className="relative w-full h-61">
-                <Image
-                  src="/images/articles3.png"
+                <img
+                  src="/images/articles3.webp"
                   alt="45 Minutes Nalang Mu Adto Sa Bantayan"
-                  fill
-                  style={{ objectFit: "cover" }}
-                  className="rounded-t-lg"
+                  className="w-full h-full object-cover rounded-t-lg"
                 />
               </div>
             </div>
             {/* Blog Card 4 */}
             <div className="min-w-[220px] bg-white rounded-lg shadow-md overflow-hidden">
               <div className="relative w-full h-61">
-                <Image
-                  src="/images/articles4.png"
+                <img
+                  src="/images/articles4.webp"
                   alt="45 Minutes Nalang Mu Adto Sa Bantayan"
-                  fill
-                  style={{ objectFit: "cover" }}
-                  className="rounded-t-lg"
+                  className="w-full h-full object-cover rounded-t-lg"
                 />
               </div>
             </div>
             {/* Blog Card 5*/}
             <div className="min-w-[220px] bg-white rounded-lg shadow-md overflow-hidden">
               <div className="relative w-full h-61">
-                <Image
-                  src="/images/articles4.png"
+                <img
+                  src="/images/articles4.webp"
                   alt="45 Minutes Nalang Mu Adto Sa Bantayan"
-                  fill
-                  style={{ objectFit: "cover" }}
-                  className="rounded-t-lg"
+                  className="w-full h-full object-cover rounded-t-lg"
                 />
               </div>
             </div>
@@ -194,5 +185,5 @@ export default function blogPage() {
       {/* Footer */}
       <Footer />
     </main>
-  );
+  )
 }
