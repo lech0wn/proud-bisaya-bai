@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import React from "react";
-import Image from "next/image";
+import React from "react"
+import Image from "next/image"
 
 const Footer: React.FC = () => {
   return (
@@ -30,26 +30,26 @@ const Footer: React.FC = () => {
           </form>
           <div className="flex gap-4 mt-2">
             {/* Social Media Icons */}
-            <Image
-              src="/images/fb_svg.png"
+            <img
+              src="/images/fb_svg.webp"
               alt="Facebook"
               width={30}
               height={30}
             />
-            <Image
-              src="/images/ig_svg.png"
+            <img
+              src="/images/ig_svg.webp"
               alt="Instagram"
               width={30}
               height={30}
             />
-            <Image
-              src="/images/twitter_svg.png"
+            <img
+              src="/images/twitter_svg.webp"
               alt="Twitter/X"
               width={30}
               height={30}
             />
-            <Image
-              src="/images/yt_svg.png"
+            <img
+              src="/images/yt_svg.webp"
               alt="YouTube"
               width={30}
               height={30}
@@ -82,7 +82,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

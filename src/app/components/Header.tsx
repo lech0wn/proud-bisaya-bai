@@ -1,13 +1,12 @@
-"use client";
+"use client"
 
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
+import React, { useEffect, useState } from "react"
+import Link from "next/link"
 
 type NavItem = {
-  label: string;
-  href: string;
-};
+  label: string
+  href: string
+}
 
 const defaultItems: NavItem[] = [
   { label: "Destinations", href: "/destinations" },
@@ -15,21 +14,21 @@ const defaultItems: NavItem[] = [
   { label: "Food", href: "/food" },
   { label: "Brand and Products", href: "/brand-and-products" },
   { label: "News and Entertainment", href: "/news-and-entertainment" },
-];
+]
 
 export default function Navbar({
   items = defaultItems,
 }: {
-  items?: NavItem[];
+  items?: NavItem[]
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     if (typeof document !== "undefined") {
-      const width = isOpen ? "240px" : "0px";
-      document.documentElement.style.setProperty("--sidebar-width", width);
+      const width = isOpen ? "240px" : "0px"
+      document.documentElement.style.setProperty("--sidebar-width", width)
     }
-  }, [isOpen]);
+  }, [isOpen])
 
   return (
     <>
@@ -37,11 +36,11 @@ export default function Navbar({
       <div className="fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200">
         <div className="px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Image
-              src="/images/pbb_icon1.png"
+            <img
+              src="/images/pbb_icon1.webp"
               alt="Proud Bisaya Bai"
-              width={24}
-              height={24}
+              width={64}
+              height={64}
             />
           </div>
           <button
@@ -97,5 +96,5 @@ export default function Navbar({
         )}
       </aside>
     </>
-  );
+  )
 }
