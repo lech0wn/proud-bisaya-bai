@@ -1,70 +1,116 @@
-'use client';
 import { useState, useEffect } from 'react';
-import { articlesApi, Article, CategoryKey } from '@/lib/api/articles';
 
-export function useArticles(params?: {
-  category?: CategoryKey;
-  subcategory?: string;
-  page?: number;
-  limit?: number;
-}) {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
+export function useArticle(slug?: string) {
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [pagination, setPagination] = useState({
-    total: 0,
-    page: 1,
-    totalPages: 0
-  });
+  const [article, setArticle] = useState<any>(null);
 
+  // Fetch article if slug is provided
   useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        setLoading(true);
-        const data = await articlesApi.getAll(params);
-        setArticles(data.articles);
-        setPagination({
-          total: data.total,
-          page: data.page,
-          totalPages: data.totalPages
-        });
-        setError(null);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchArticles();
-  }, [params?.category, params?.subcategory, params?.page, params?.limit]);
-
-  return { articles, loading, error, pagination };
-}
-
-export function useArticle(slug: string) {
-  const [article, setArticle] = useState<Article | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!slug) return;
-
-    const fetchArticle = async () => {
-      try {
-        setLoading(true);
-        const data = await articlesApi.getBySlug(slug);
-        setArticle(data);
-        setError(null);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchArticle();
+    if (slug) {
+      fetchArticle(slug);
+    }
   }, [slug]);
 
-  return { article, loading, error };
+  async function fetchArticle(articleSlug: string) {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/admin/articles/${articleSlug}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to fetch article');
+      setArticle(data);
+      return data;
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function createArticle(articleData: {
+    title: string;
+    slug: string;
+    content: string;
+    author: string;
+    category: string;
+    subcategory?: string;
+    thumbnail_url?: string;
+  }) {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/admin/articles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(articleData),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to create article');
+      setArticle(data);
+      return data;
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function updateArticle(slug: string, updatedData: Partial<{
+    title: string;
+    slug: string;
+    content: string;
+    author: string;
+    category: string;
+    subcategory?: string;
+    thumbnail_url?: string;
+  }>) {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/admin/articles/${slug}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedData),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to update article');
+      setArticle(data);
+      return data;
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function deleteArticle(slug: string) {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/admin/articles/${slug}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to delete article');
+      setArticle(null);
+      return data;
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return {
+    article,
+    fetchArticle,
+    createArticle,
+    updateArticle,
+    deleteArticle,
+    loading,
+    error,
+  };
 }
