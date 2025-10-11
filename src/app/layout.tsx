@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import '@measured/puck/puck.css';
 import Navbar from "@/app/components/Header";
 
 const inter = Inter({
@@ -37,7 +38,6 @@ export default function RootLayout({
           >
             {children}
           </div>
-          <Navbar />
         </div>
       </body>
     </html>
