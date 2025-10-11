@@ -30,6 +30,7 @@ export default function RootLayout({
           <div
             className="flex-1 min-h-screen"
             style={{
+              paddingTop: "var(--navbar-height, 64px)",
               paddingRight: "var(--sidebar-width, 0px)",
               transition: "padding-right 200ms ease",
             }}

@@ -30,12 +30,13 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    if (
-        !user &&
-        !request.nextUrl.pathname.startsWith('/admin/login') &&
-        !request.nextUrl.pathname.startsWith('/admin/signup') &&
-        !request.nextUrl.pathname.startsWith('/admin/auth')
-    ) {
+    // redirection for unauthorized users nga mo try og go sa admin endpoints except login and signup
+    const protectedAdminRoutes = ['/admin/dashboard', '/admin/posts', '/admin/settings']
+    const isProtectedRoute = protectedAdminRoutes.some(route =>
+        request.nextUrl.pathname.startsWith(route)
+    )
+
+    if (!user && isProtectedRoute) {
         const url = request.nextUrl.clone()
         url.pathname = '/admin/login'
         return NextResponse.redirect(url)
