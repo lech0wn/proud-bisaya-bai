@@ -137,6 +137,14 @@ export default function ArticlesListPage() {
                 </div>
                 <div className="flex flex-col gap-2">
                   <Link
+                    href={`/articles/${a.slug}`}
+                    target="_blank"
+                    className="bg-green-50 text-green-700 px-4 py-2 rounded-lg hover:bg-green-100 text-center"
+                  >
+                    View
+                  </Link>
+                  
+                  <Link
                     href={`/admin/articles/${a.slug}/edit`}
                     className="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg hover:bg-blue-100 text-center"
                   >
