@@ -1,6 +1,7 @@
-import Head from "next/head"
-import React from "react"
-import Footer from "@/app/components/Footer"
+import Head from "next/head";
+import React from "react";
+import Footer from "@/app/components/Footer";
+import Header from "@/app/components/Header";
 
 const Home: React.FC = () => {
   const stories = [
@@ -16,11 +17,11 @@ const Home: React.FC = () => {
       title: "Food and Culture",
       image: "/images/food.jpg",
     },
-  ]
+  ];
 
   const articles = [
     {
-      title: "45 Minutes Nalang Mu-Acto Sa Bantayan",
+      title: "45 Minutes Nalang Mu-Adto Sa Bantayan",
       date: "Sept 17, 2025",
       image: "/images/story1.jpg",
     },
@@ -39,7 +40,7 @@ const Home: React.FC = () => {
       date: "Oct 1, 2025",
       image: "/images/story4.jpg",
     },
-  ]
+  ];
 
   const breakingNews = [
     {
@@ -50,7 +51,7 @@ const Home: React.FC = () => {
       title: "TRAFFIC ALERT: Flooding in N. Busay Road",
       time: "10:15 AM",
     },
-  ]
+  ];
 
   const latestUpdates = [
     {
@@ -68,7 +69,7 @@ const Home: React.FC = () => {
       date: "Sept 27, 2025",
       image: "/images/latest3.jpg",
     },
-  ]
+  ];
 
   const editorsPicks = [
     {
@@ -86,7 +87,7 @@ const Home: React.FC = () => {
       date: "Sept 27, 2025",
       image: "/images/pick3.jpg",
     },
-  ]
+  ];
 
   return (
     <div>
@@ -100,6 +101,8 @@ const Home: React.FC = () => {
       </Head>
 
       <main>
+        {/* Header */}
+        <Header />
         {/* Hero Banner */}
         <div
           className="relative h-screen bg-cover bg-center "
@@ -273,7 +276,7 @@ const Home: React.FC = () => {
         <Footer />
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

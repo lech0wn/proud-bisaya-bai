@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState } from "react"
-import Link from "next/link"
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 type NavItem = {
-  label: string
-  href: string
-}
+  label: string;
+  href: string;
+};
 
 const defaultItems: NavItem[] = [
   { label: "Destinations", href: "/destinations" },
@@ -14,21 +14,21 @@ const defaultItems: NavItem[] = [
   { label: "Food", href: "/food" },
   { label: "Brand and Products", href: "/brand-and-products" },
   { label: "News and Entertainment", href: "/news-and-entertainment" },
-]
+];
 
 export default function Navbar({
   items = defaultItems,
 }: {
-  items?: NavItem[]
+  items?: NavItem[];
 }) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (typeof document !== "undefined") {
-      const width = isOpen ? "240px" : "0px"
-      document.documentElement.style.setProperty("--sidebar-width", width)
+      const width = isOpen ? "240px" : "0px";
+      document.documentElement.style.setProperty("--sidebar-width", width);
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   return (
     <>
@@ -96,5 +96,5 @@ export default function Navbar({
         )}
       </aside>
     </>
-  )
+  );
 }

@@ -1,45 +1,48 @@
-"use client"
+"use client";
 
-import React, { useRef } from "react"
-import Image from "next/image"
-import Footer from "@/app/components/Footer"
+import React, { useRef } from "react";
+import Image from "next/image";
+import Footer from "@/app/components/Footer";
+import Header from "../components/Header";
 
 export default function blogPage() {
-  const scrollRef = useRef<HTMLDivElement>(null)
-  let isDown = false
-  let startX = 0
-  let scrollLeft = 0
+  const scrollRef = useRef<HTMLDivElement>(null);
+  let isDown = false;
+  let startX = 0;
+  let scrollLeft = 0;
 
   // Mouse event handlers for drag-to-scroll
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    isDown = true
-    startX = e.pageX - (scrollRef.current?.offsetLeft ?? 0)
-    scrollLeft = scrollRef.current?.scrollLeft ?? 0
-    document.body.style.cursor = "grabbing"
-  }
+    isDown = true;
+    startX = e.pageX - (scrollRef.current?.offsetLeft ?? 0);
+    scrollLeft = scrollRef.current?.scrollLeft ?? 0;
+    document.body.style.cursor = "grabbing";
+  };
 
   const handleMouseLeave = () => {
-    isDown = false
-    document.body.style.cursor = "default"
-  }
+    isDown = false;
+    document.body.style.cursor = "default";
+  };
 
   const handleMouseUp = () => {
-    isDown = false
-    document.body.style.cursor = "default"
-  }
+    isDown = false;
+    document.body.style.cursor = "default";
+  };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isDown) return
-    e.preventDefault()
-    const x = e.pageX - (scrollRef.current?.offsetLeft ?? 0)
-    const walk = x - startX
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - (scrollRef.current?.offsetLeft ?? 0);
+    const walk = x - startX;
     if (scrollRef.current) {
-      scrollRef.current.scrollLeft = scrollLeft - walk
+      scrollRef.current.scrollLeft = scrollLeft - walk;
     }
-  }
+  };
 
   return (
     <main className="bg-white min-h-screen">
+      {/* Header */}
+      <Header />
       {/* Navigation Bar */}
       <div className="w-full h-64 relative">
         <div className="w-full h-64 relative overflow-hidden">
@@ -185,5 +188,5 @@ export default function blogPage() {
       {/* Footer */}
       <Footer />
     </main>
-  )
+  );
 }
