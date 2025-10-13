@@ -1,15 +1,61 @@
-import ArticleRenderer from '@/app/components/ArticleRenderer';
+import { createClient } from '@/utils/supabase/server';
+import { notFound } from 'next/navigation';
+import ArticleRenderer from '../../components/ArticleRenderer';
 
-async function getArticle(slug: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/articles/${slug}`);
-  if (!res.ok) return null;
-  return res.json();
+interface ArticlePageProps {
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
-export default async function ArticlePage({ params }: { params: { slug: string } }) {
-  const article = await getArticle(params.slug);
-  if (!article) {
-    return <div className="text-center py-20 text-2xl text-gray-500">Article not found.</div>;
+export default async function ArticlePage({ params }: ArticlePageProps) {
+  // Await the params
+  const { slug } = await params;
+
+  const supabase = await createClient();
+
+  const { data: article, error } = await supabase
+    .from('articles')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+
+  if (error || !article) {
+    notFound();
   }
-  return <ArticleRenderer article={article} />;
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <ArticleRenderer article={article} />
+    </div>
+  );
+}
+
+// Generate metadata for SEO
+export async function generateMetadata({ params }: ArticlePageProps) {
+  // Await the params
+  const { slug } = await params;
+
+  const supabase = await createClient();
+
+  const { data: article } = await supabase
+    .from('articles')
+    .select('title, author, category, thumbnail_url')
+    .eq('slug', slug)
+    .single();
+
+  if (!article) {
+    return {
+      title: 'Article Not Found',
+    };
+  }
+
+  return {
+    title: article.title,
+    description: 'By ${article.author} - ${article.category}',
+    openGraph: {
+      title: article.title,
+      images: article.thumbnail_url ? [article.thumbnail_url] : [],
+    },
+  };
 }

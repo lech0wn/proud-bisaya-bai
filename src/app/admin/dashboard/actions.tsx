@@ -1,1 +1,0 @@
-// todo: himoi nig logic para maka kuha sa article table
