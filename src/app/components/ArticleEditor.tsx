@@ -259,7 +259,7 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
       }
 
       alert(slug ? 'Article updated successfully!' : 'Article published successfully!');
-      router.push('/admin/articles');
+      router.push('/admin/dashboard');
     } catch (e: any) {
       console.error('Save error:', e);
       alert(`Save failed: ${e.message}`);
@@ -293,7 +293,7 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
           <div className="flex items-center justify-between mb-4">
             <div>
               <button
-                onClick={() => router.push('/admin/articles')}
+                onClick={() => router.push('/admin/dashboard')}
                 className="text-blue-600 hover:underline text-sm mb-2 inline-block"
               >
                 ← Back to Articles
