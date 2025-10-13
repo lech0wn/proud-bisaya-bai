@@ -1,46 +1,32 @@
 import Head from "next/head";
 import React from "react";
+import Link from "next/link";
 import Footer from "@/app/components/Footer";
 import Header from "@/app/components/Header";
+import { createClient } from "@/utils/supabase/server";
 
-const Home: React.FC = () => {
+const Home: React.FC = async () => {
   const stories = [
     {
-      title: "News",
+      title: "Destinations",
       image: "/images/news.jpg",
     },
     {
-      title: "Travel and Destination",
+      title: "News and Entertainment",
       image: "/images/travel.jpg",
     },
     {
-      title: "Food and Culture",
+      title: "Food",
       image: "/images/food.jpg",
     },
   ];
 
-  const articles = [
-    {
-      title: "45 Minutes Nalang Mu-Adto Sa Bantayan",
-      date: "Sept 17, 2025",
-      image: "/images/story1.jpg",
-    },
-    {
-      title: "Proweaver Contest Puts Cebuano Talent on the Map",
-      date: "Sept 25, 2025",
-      image: "/images/story2.jpg",
-    },
-    {
-      title: "Typhoon Safety Reminders: Stay Prepared, Stay Safe",
-      date: "Sept 30, 2025",
-      image: "/images/story3.jpg",
-    },
-    {
-      title: "Slice, Slice, Baby! Domino’s 5-Day Pizza Sale Hits Cebu",
-      date: "Oct 1, 2025",
-      image: "/images/story4.jpg",
-    },
-  ];
+  const supabase = await createClient();
+  const { data: articlesData } = await supabase
+    .from("articles")
+    .select("title, slug, thumbnail_url, created_at")
+    .order("created_at", { ascending: false })
+    .limit(8);
 
   const breakingNews = [
     {
@@ -153,21 +139,26 @@ const Home: React.FC = () => {
 
             {/* Articles */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-black">
-              {articles.map((article, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-lg shadow-lg overflow-hidden"
+              {(articlesData || []).map((article) => (
+                <Link
+                  key={article.slug}
+                  href={`/articles/${article.slug}`}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                 >
                   <img
-                    src={article.image}
+                    src={article.thumbnail_url || "/images/articles.webp"}
                     alt={article.title}
                     className="w-full h-40 object-cover"
                   />
                   <div className="p-4">
-                    <h4 className="text-lg font-semibold">{article.title}</h4>
-                    <p className="text-sm text-gray-500">{article.date}</p>
+                    <h4 className="text-lg font-semibold line-clamp-2">
+                      {article.title}
+                    </h4>
+                    <p className="text-sm text-gray-500">
+                      {new Date(article.created_at).toLocaleDateString()}
+                    </p>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
