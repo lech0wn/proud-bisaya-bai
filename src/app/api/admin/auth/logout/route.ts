@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     );
   }
   
-  return NextResponse.redirect(new URL('/login', req.url), {
+  return NextResponse.redirect(new URL('/admin/login', req.url), {
     status: 303
   });
 }
