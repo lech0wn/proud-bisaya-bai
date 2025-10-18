@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect, useRef } from "react";
 import { Puck } from "@measured/puck";
 import type { Config, Data } from "@measured/puck";
@@ -121,17 +120,14 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const thumbnailInputRef = useRef<HTMLInputElement>(null);
-
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(!!slug);
   const [uploading, setUploading] = useState(false);
   const [uploadingThumbnail, setUploadingThumbnail] = useState(false);
-
   const [data, setData] = useState<Data>({
     content: [],
     root: { props: {} },
   });
-
   const [title, setTitle] = useState("");
   const [articleSlug, setArticleSlug] = useState("");
   const [author, setAuthor] = useState("");
@@ -154,16 +150,13 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
     try {
       const res = await fetch(`/api/articles/${articleSlug}`);
       if (!res.ok) throw new Error("Failed to fetch article");
-
       const article = await res.json();
-
       setTitle(article.title || "");
       setArticleSlug(article.slug || "");
       setAuthor(article.author || "");
       setCategory(article.category || "");
       setSubcategory(article.subcategory || "");
       setThumbnail(article.thumbnail_url || "");
-
       if (article.content) {
         try {
           const parsedContent =
@@ -195,27 +188,21 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
   const uploadImage = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append("file", file);
-
     const res = await fetch("/api/admin/upload-image", {
       method: "POST",
       body: formData,
     });
-
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Image upload failed");
-
     return data.url;
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     setUploading(true);
     try {
       const imageUrl = await uploadImage(file);
-
-      // Copy URL to clipboard
       await navigator.clipboard.writeText(imageUrl);
       alert(
         `Image uploaded successfully!\nURL copied to clipboard:\n${imageUrl}\n\nPaste this URL into the Image Block's "Image URL" field.`
@@ -235,7 +222,6 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     setUploadingThumbnail(true);
     try {
       const imageUrl = await uploadImage(file);
@@ -297,7 +283,6 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
       }
 
       const responseData = await res.json();
-
       if (!res.ok) {
         throw new Error(responseData.error || "Failed to save article");
       }
@@ -305,7 +290,7 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
       alert(
         slug
           ? "Article updated successfully!"
-          : "Article published successfully!"
+          : "Article created successfully!"
       );
       router.push("/admin/dashboard");
     } catch (e: any) {
@@ -368,7 +353,6 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
               </button>
             </div>
           </div>
-
           {/* Hidden file input for content images */}
           <input
             ref={fileInputRef}
@@ -377,7 +361,6 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
             onChange={handleImageUpload}
             className="hidden"
           />
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -392,7 +375,6 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
                 required
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Slug *
@@ -407,7 +389,6 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
                 required
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Author *
@@ -421,7 +402,6 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
                 required
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Category *
@@ -442,7 +422,6 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
                 ))}
               </select>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Subcategory
@@ -463,7 +442,6 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
                 ))}
               </select>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Thumbnail
@@ -493,7 +471,6 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
               />
             </div>
           </div>
-
           {thumbnail && (
             <div className="mt-4">
               <p className="text-sm font-medium text-gray-700 mb-2">
@@ -506,7 +483,6 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
               />
             </div>
           )}
-
           {/* Upload Instructions */}
           <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-sm text-blue-800">
@@ -518,17 +494,30 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
           </div>
         </div>
       </div>
-
       {/* Puck Editor */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden relative">
         <Puck
           config={config}
           data={data}
           onPublish={handleSave}
           onChange={setData}
         />
+        {/* Custom Create/Update Button Overlay */}
+        <style jsx global>{`
+          [data-puck-portal-root] button:has(svg):last-child {
+            display: none !important;
+          }
+        `}</style>
+        <div className="absolute top-4 right-4 z-50">
+          <button
+            onClick={() => handleSave(data)}
+            disabled={saving}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          >
+            {slug ? "💾 Update" : "✨ Create"}
+          </button>
+        </div>
       </div>
-
       {/* Loading Overlays */}
       {(saving || uploading || uploadingThumbnail) && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -537,7 +526,7 @@ export default function ArticleEditor({ slug }: ArticleEditorProps) {
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
               <p className="text-gray-900 font-medium">
                 {saving &&
-                  (slug ? "Updating article..." : "Publishing article...")}
+                  (slug ? "Updating article..." : "Creating article...")}
                 {uploading && "Uploading image..."}
                 {uploadingThumbnail && "Uploading thumbnail..."}
               </p>

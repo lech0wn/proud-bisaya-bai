@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Search, MoreVertical } from "lucide-react";
+import { Search } from "lucide-react";
 import AdminHeader from "@/app/components/AdminHeader";
 
 type Article = {
@@ -14,6 +14,8 @@ type Article = {
   created_at?: string;
   thumbnail_url?: string;
   status?: string;
+  isPublished?: boolean;
+  isArchived?: boolean;
 };
 
 export default function AdminDashboardPage() {
@@ -25,6 +27,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     fetchArticles();
   }, []);
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -59,18 +62,42 @@ export default function AdminDashboardPage() {
     }
   }
 
-  async function handleDelete(slug: string) {
-    if (!confirm("Delete this article?")) return;
+  async function handlePublish(slug: string) {
+    if (!confirm("Publish this article?")) return;
     try {
-      const res = await fetch(`/api/admin/articles/${slug}`, {
-        method: "DELETE",
+      const res = await fetch(`/api/admin/articles/${slug}/publish`, {
+        method: "PATCH",
       });
-      if (!res.ok) throw new Error("Failed to delete");
+      if (!res.ok) throw new Error("Failed to publish");
       fetchArticles();
     } catch (err: any) {
       alert(err.message);
     }
   }
+
+  async function handleArchive(slug: string) {
+    if (!confirm("Archive this article?")) return;
+    try {
+      const res = await fetch(`/api/admin/articles/${slug}/archive`, {
+        method: "PATCH",
+      });
+      if (!res.ok) throw new Error("Failed to archive");
+      fetchArticles();
+    } catch (err: any) {
+      alert(err.message);
+    }
+  }
+
+  const filteredArticles = articles.filter((article) => {
+    if (activeTab === "pending") {
+      return !article.isPublished && !article.isArchived;
+    } else if (activeTab === "archived") {
+      return article.isArchived;
+    } else if (activeTab === "published") {
+      return article.isPublished && !article.isArchived;
+    }
+    return false;
+  });
 
   if (loading)
     return (
@@ -126,24 +153,24 @@ export default function AdminDashboardPage() {
                 Pending Posts
               </button>
               <button
-                onClick={() => setActiveTab("deleted")}
+                onClick={() => setActiveTab("archived")}
                 className={`py-4 font-medium border-b-2 transition-colors ${
-                  activeTab === "deleted"
+                  activeTab === "archived"
                     ? "border-red-500 text-red-600"
                     : "border-transparent text-gray-600 hover:text-gray-900"
                 }`}
               >
-                Deleted Posts
+                Archived Posts
               </button>
               <button
-                onClick={() => setActiveTab("approved")}
+                onClick={() => setActiveTab("published")}
                 className={`py-4 font-medium border-b-2 transition-colors ${
-                  activeTab === "approved"
+                  activeTab === "published"
                     ? "border-red-500 text-red-600"
                     : "border-transparent text-gray-600 hover:text-gray-900"
                 }`}
               >
-                Approved Posts
+                Published Posts
               </button>
             </div>
             <div className="flex gap-8 px-6">
@@ -158,7 +185,7 @@ export default function AdminDashboardPage() {
               </Link>
             </div>
           </div>
-          {articles.length === 0 ? (
+          {filteredArticles.length === 0 ? (
             <div className="bg-white rounded-lg p-12 text-center">
               <p className="text-black mb-4">
                 No articles found. Feel free to generate!
@@ -190,7 +217,7 @@ export default function AdminDashboardPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {articles.map((a) => (
+                  {filteredArticles.map((a) => (
                     <tr
                       key={a.id}
                       className="hover:bg-gray-50 transition-colors"
@@ -228,31 +255,35 @@ export default function AdminDashboardPage() {
                       </td>
                       <td className="w-1/6 px-4 py-3 text-m text-gray-900 text-center align-middle border-b border-gray-200">
                         <div className="flex flex-col gap-1 items-center">
-                          <button
-                            onClick={() => handleDelete(a.slug)}
-                            className="text-white font-bold px-10 py-2 rounded-lg bg-gray-400"
-                          >
-                            Publish
-                          </button>
+                          {!a.isPublished && !a.isArchived && (
+                            <button
+                              onClick={() => handlePublish(a.slug)}
+                              className="text-white font-bold px-10 py-2 rounded-lg bg-green-500 hover:bg-green-600"
+                            >
+                              Publish
+                            </button>
+                          )}
                           <Link
                             href={`/articles/${a.slug}`}
                             target="_blank"
-                            className="bg-green-500 text-white font-bold px-12 py-2 rounded-lg text-center"
+                            className="bg-blue-500 text-white font-bold px-12 py-2 rounded-lg text-center hover:bg-blue-600"
                           >
                             View
                           </Link>
                           <Link
                             href={`/admin/articles/${a.slug}/edit`}
-                            className="bg-blue-500 text-white font-bold px-13 py-2 rounded-lg text-center"
+                            className="bg-yellow-500 text-white font-bold px-13 py-2 rounded-lg text-center hover:bg-yellow-600"
                           >
                             Edit
                           </Link>
-                          <button
-                            onClick={() => handleDelete(a.slug)}
-                            className="text-white font-bold px-10.5 py-2 rounded-lg bg-red-400"
-                          >
-                            Delete
-                          </button>
+                          {!a.isArchived && (
+                            <button
+                              onClick={() => handleArchive(a.slug)}
+                              className="text-white font-bold px-10.5 py-2 rounded-lg bg-red-400 hover:bg-red-500"
+                            >
+                              Archive
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
