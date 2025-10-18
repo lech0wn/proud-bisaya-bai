@@ -40,7 +40,7 @@ export default function AdminDashboardPage() {
       setLoading(true);
       setError(null);
 
-      const res = await fetch("/api/articles");
+      const res = await fetch("/api/admin/articles");
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
       const text = await res.text();
@@ -75,6 +75,19 @@ export default function AdminDashboardPage() {
     }
   }
 
+  async function handleUnpublish(slug: string) {
+    if (!confirm("Unpublish this article? It will return to pending status.")) return;
+    try {
+      const res = await fetch(`/api/admin/articles/${slug}/unpublish`, {
+        method: "PATCH",
+      });
+      if (!res.ok) throw new Error("Failed to unpublish");
+      fetchArticles();
+    } catch (err: any) {
+      alert(err.message);
+    }
+  }
+
   async function handleArchive(slug: string) {
     if (!confirm("Archive this article?")) return;
     try {
@@ -82,6 +95,19 @@ export default function AdminDashboardPage() {
         method: "PATCH",
       });
       if (!res.ok) throw new Error("Failed to archive");
+      fetchArticles();
+    } catch (err: any) {
+      alert(err.message);
+    }
+  }
+
+  async function handleUnarchive(slug: string) {
+    if (!confirm("Unarchive this article? It will return to its previous state.")) return;
+    try {
+      const res = await fetch(`/api/admin/articles/${slug}/unarchive`, {
+        method: "PATCH",
+      });
+      if (!res.ok) throw new Error("Failed to unarchive");
       fetchArticles();
     } catch (err: any) {
       alert(err.message);
@@ -255,31 +281,55 @@ export default function AdminDashboardPage() {
                       </td>
                       <td className="w-1/6 px-4 py-3 text-m text-gray-900 text-center align-middle border-b border-gray-200">
                         <div className="flex flex-col gap-1 items-center">
+                          {/* Publish button - only for pending articles */}
                           {!a.isPublished && !a.isArchived && (
                             <button
                               onClick={() => handlePublish(a.slug)}
-                              className="text-white font-bold px-10 py-2 rounded-lg bg-green-500 hover:bg-green-600"
+                              className="text-white font-bold px-10 py-2 rounded-lg bg-green-500 hover:bg-green-600 w-full"
                             >
                               Publish
                             </button>
                           )}
+                          
+                          {/* Unpublish button - only for published articles */}
+                          {a.isPublished && !a.isArchived && (
+                            <button
+                              onClick={() => handleUnpublish(a.slug)}
+                              className="text-white font-bold px-10 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 w-full"
+                            >
+                              Unpublish
+                            </button>
+                          )}
+                          
+                          {/* Unarchive button - ALWAYS show for archived articles */}
+                          {a.isArchived === true && (
+                            <button
+                              onClick={() => handleUnarchive(a.slug)}
+                              className="text-white font-bold px-10 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 w-full"
+                            >
+                              Unarchive
+                            </button>
+                          )}
+                          
                           <Link
                             href={`/articles/${a.slug}`}
                             target="_blank"
-                            className="bg-blue-500 text-white font-bold px-12 py-2 rounded-lg text-center hover:bg-blue-600"
+                            className="bg-blue-500 text-white font-bold px-12 py-2 rounded-lg text-center hover:bg-blue-600 w-full"
                           >
                             View
                           </Link>
                           <Link
                             href={`/admin/articles/${a.slug}/edit`}
-                            className="bg-yellow-500 text-white font-bold px-13 py-2 rounded-lg text-center hover:bg-yellow-600"
+                            className="bg-yellow-500 text-white font-bold px-13 py-2 rounded-lg text-center hover:bg-yellow-600 w-full"
                           >
                             Edit
                           </Link>
+                          
+                          {/* Archive button - only for non-archived articles */}
                           {!a.isArchived && (
                             <button
                               onClick={() => handleArchive(a.slug)}
-                              className="text-white font-bold px-10.5 py-2 rounded-lg bg-red-400 hover:bg-red-500"
+                              className="text-white font-bold px-10.5 py-2 rounded-lg bg-red-400 hover:bg-red-500 w-full"
                             >
                               Archive
                             </button>
