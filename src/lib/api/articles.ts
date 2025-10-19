@@ -11,6 +11,8 @@ export interface Article {
   author: string;
   category: CategoryKey;
   subcategory?: string;
+  category_slug: string;
+  subcategory_slug: string;
   thumbnail_url?: string;
   created_at: string;
   updated_at: string;

@@ -24,7 +24,9 @@ const Home: React.FC = async () => {
   const supabase = await createClient();
   const { data: articlesData } = await supabase
     .from("articles")
-    .select("title, slug, thumbnail_url, created_at")
+    .select(
+      "title, slug, thumbnail_url, created_at, category, subcategory, category_slug, subcategory_slug"
+    )
     .eq("isPublished", true)
     .eq("isArchived", false) //exclude archived posts
     .order("created_at", { ascending: false })
@@ -145,27 +147,31 @@ const Home: React.FC = async () => {
 
             {/* Articles */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-black">
-              {(articlesData || []).map((article) => (
-                <Link
-                  key={article.slug}
-                  href={`/articles/${article.slug}`}
-                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-                >
-                  <img
-                    src={article.thumbnail_url || "/images/articles.webp"}
-                    alt={article.title}
-                    className="w-full h-40 object-cover"
-                  />
-                  <div className="p-4">
-                    <h4 className="text-lg font-semibold line-clamp-2">
-                      {article.title}
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      {new Date(article.created_at).toLocaleDateString()}
-                    </p>
-                  </div>
-                </Link>
-              ))}
+              {(articlesData || []).map((article) => {
+                const href = `/articles/${article.category_slug}/${article.subcategory_slug}/${article.slug}`;
+                return (
+                  <Link
+                    key={article.slug}
+                    href={href}
+                    className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                  >
+                    <img
+                      src={article.thumbnail_url || "/images/articles.webp"}
+                      alt={article.title}
+                      className="w-full h-40 object-cover"
+                      loading="lazy"
+                    />
+                    <div className="p-4">
+                      <h4 className="text-lg font-semibold line-clamp-2">
+                        {article.title}
+                      </h4>
+                      <p className="text-sm text-gray-500">
+                        {new Date(article.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
