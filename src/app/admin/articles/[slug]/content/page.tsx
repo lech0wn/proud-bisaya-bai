@@ -107,12 +107,15 @@ const components: Config["components"] = {
             }
         } else {
             try {
-            const res = await fetch(`/api/articles/${slug}`);
+            const res = await fetch(`/api/admin/articles/${slug}`);
             if (!res.ok) throw new Error("Failed to fetch article");
 
             const article = await res.json();
-
-            setMetadata({
+            
+            if (savedMetadata) {
+                setMetadata(JSON.parse(savedMetadata));
+            }else{
+                setMetadata({
                 title: article.title,
                 slug: article.slug,
                 author: article.author,
@@ -120,6 +123,7 @@ const components: Config["components"] = {
                 subcategory: article.subcategory,
                 thumbnail_url: article.thumbnail_url,
             });
+        }
 
             if (article.content) {
                 try {
