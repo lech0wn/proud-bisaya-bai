@@ -25,6 +25,8 @@ const Home: React.FC = async () => {
   const { data: articlesData } = await supabase
     .from("articles")
     .select("title, slug, thumbnail_url, created_at")
+    .eq("isPublished", true)
+    .eq("isArchived", false) //exclude archived posts
     .order("created_at", { ascending: false })
     .limit(8);
 
