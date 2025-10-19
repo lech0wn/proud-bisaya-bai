@@ -36,20 +36,30 @@ export default function Navbar({
       <div className="fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200">
         <div className="px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img
-              src="/images/pbb_icon1.webp"
-              alt="Proud Bisaya Bai"
-              width={64}
-              height={64}
-            />
+            <Link href="/home" title="Go to Home">
+              <img
+                src="/images/pbb_hd_logo.webp"
+                alt="Proud Bisaya Bai"
+                width={50}
+                height={50}
+                className="cursor-pointer"
+              />
+            </Link>
           </div>
+          {/* Burger Menu Button */}
           <button
             aria-label={isOpen ? "Close menu" : "Open menu"}
             onClick={() => setIsOpen((v) => !v)}
-            className="rounded p-2 text-xl text-red-600 hover:text-red-700 hover:bg-gray-100"
+            className="rounded p-2 text-xl hover:bg-gray-100"
             title={isOpen ? "Close" : "Open"}
           >
-            {isOpen ? "x" : "☰"}
+            <img
+              src={isOpen ? "/images/burger.webp" : "/images/burger.webp"}
+              alt={isOpen ? "Close menu" : "Open menu"}
+              width={30}
+              height={30}
+              className="cursor-pointer"
+            />
           </button>
         </div>
       </div>
@@ -76,7 +86,13 @@ export default function Navbar({
                   className="rounded p-2 text-xl text-black hover:text-black hover:bg-gray-200"
                   title="Close"
                 >
-                  x
+                  <img
+                    src="/images/close.webp"
+                    alt="Close menu"
+                    width={20}
+                    height={20}
+                    className="cursor-pointer"
+                  />
                 </button>
               </div>
             </div>

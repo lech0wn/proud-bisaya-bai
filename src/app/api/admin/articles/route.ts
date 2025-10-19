@@ -2,7 +2,6 @@ import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 import { CATEGORIES } from '@/app/components/Categories';
 
-
 // POST new article (admin only)
 export async function POST(request: Request) {
   try {
@@ -44,7 +43,10 @@ export async function POST(request: Request) {
         author,
         category,
         subcategory,
-        thumbnail_url
+        thumbnail_url,
+        isPublished: false,
+        isArchived: false,
+        status: 'Pending'
       })
       .select()
       .single();
@@ -56,4 +58,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-

@@ -6,7 +6,6 @@ export async function GET(request: Request) {
   try {
     const supabase = await createClient();
     const { searchParams } = new URL(request.url);
-    
     const category = searchParams.get('category');
     const subcategory = searchParams.get('subcategory');
     const page = parseInt(searchParams.get('page') || '1');
@@ -16,6 +15,8 @@ export async function GET(request: Request) {
     let query = supabase
       .from('articles')
       .select('*', { count: 'exact' })
+      .eq('isPublished', true)
+      .eq('isArchived', false)
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
 
