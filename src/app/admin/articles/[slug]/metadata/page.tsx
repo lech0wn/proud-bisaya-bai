@@ -43,7 +43,7 @@ export default function ArticleMetadataPage() {
     const fetchArticle = async (articleSlug: string) => {
         setLoading(true);
         try {
-        const res = await fetch(`/api/articles/${articleSlug}`);
+        const res = await fetch(`/api/admin/articles/${articleSlug}`);
         if (!res.ok) throw new Error("Failed to fetch article");
 
         const article = await res.json();
