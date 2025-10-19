@@ -1,13 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
-
-const categories = {
-  "Destinations": ["Cebu Highlights", "Beaches & Islands", "Mountain Escapes", "Heritage & History", "Hidden Gems", "Travel Itineraries"],
-  "Brands and Products": ["Homegrown Brands", "Fashion & Apparel", "Tech & Gadgets", "Beauty & Wellness", "Food Products", "Eco-Friendly & Sustainable"],
-  "Stories": ["Life in Cebu", "Resilience & Recovery", "Student Stories", "Entrepreneur Journeys", "Cultural Narratives", "Inspirational Profiles"],
-  "News and Entertainment": ["Breaking News Cebu", "Local Governance", "Festivals & Events", "Entertainment Buzz", "Music & Arts", "Sports", "Campus News"],
-  "Food": ["Cebu Favorites", "Street Food Finds", "Café & Coffee Spots", "Seafood Specials", "Sweet Treats & Desserts", "Food Reviews"]
-}
+import { CATEGORIES } from '@/app/components/Categories';
 // PUT update article (admin only)
 export async function PUT(
   request: Request,
@@ -36,10 +29,10 @@ export async function PUT(
     const { title, slug: newSlug, content, author, category, subcategory, thumbnail_url } = body;
 
     // Validate category and subcategory if provided
-    if (category && !categories[category as keyof typeof categories]) {
+    if (category && !CATEGORIES[category as keyof typeof CATEGORIES]) {
       return NextResponse.json({ error: 'Invalid category' }, { status: 400 });
     }
-    if (subcategory && category && !categories[category as keyof typeof categories].includes(subcategory)) {
+    if (subcategory && category && !CATEGORIES[category as keyof typeof CATEGORIES].includes(subcategory)) {
       return NextResponse.json({ error: 'Invalid subcategory for this category' }, { status: 400 });
     }
 
