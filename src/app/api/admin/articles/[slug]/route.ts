@@ -1,13 +1,66 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
+import { CATEGORIES } from '@/app/components/Categories';
 
-const categories = {
-  "Destinations": ["Cebu Highlights", "Beaches & Islands", "Mountain Escapes", "Heritage & History", "Hidden Gems", "Travel Itineraries"],
-  "Brands and Products": ["Homegrown Brands", "Fashion & Apparel", "Tech & Gadgets", "Beauty & Wellness", "Food Products", "Eco-Friendly & Sustainable"],
-  "Stories": ["Life in Cebu", "Resilience & Recovery", "Student Stories", "Entrepreneur Journeys", "Cultural Narratives", "Inspirational Profiles"],
-  "News and Entertainment": ["Breaking News Cebu", "Local Governance", "Festivals & Events", "Entertainment Buzz", "Music & Arts", "Sports", "Campus News"],
-  "Food": ["Cebu Favorites", "Street Food Finds", "Café & Coffee Spots", "Seafood Specials", "Sweet Treats & Desserts", "Food Reviews"]
+// GET single article by slug (admin only)
+export async function GET(
+  request: Request,
+  { params }: { params: { slug: string } }
+) {
+  try {
+    const supabase = await createClient();
+    
+    // Check if user is admin
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    if (profile?.role !== 'admin') {
+      return NextResponse.json(
+        { error: 'Forbidden - Admin access required' }, 
+        { status: 403 }
+      );
+    }
+
+    // Fetch single article by slug (including all fields for editing)
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .eq('slug', params.slug)
+      .single();
+
+    if (error) {
+      console.error('Fetch article error:', error);
+      
+      // Handle "not found" error specifically
+      if (error.code === 'PGRST116') {
+        return NextResponse.json(
+          { error: 'Article not found' }, 
+          { status: 404 }
+        );
+      }
+      
+      throw error;
+    }
+
+    return NextResponse.json(data);
+  } catch (error: any) {
+    console.error('Admin article GET error:', error);
+    return NextResponse.json(
+      { error: error.message }, 
+      { status: 500 }
+    );
+  }
 }
+
 // PUT update article (admin only)
 export async function PUT(
   request: Request,
@@ -18,6 +71,7 @@ export async function PUT(
     
     // Check if user is admin
     const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -36,10 +90,11 @@ export async function PUT(
     const { title, slug: newSlug, content, author, category, subcategory, thumbnail_url } = body;
 
     // Validate category and subcategory if provided
-    if (category && !categories[category as keyof typeof categories]) {
+    if (category && !CATEGORIES[category as keyof typeof CATEGORIES]) {
       return NextResponse.json({ error: 'Invalid category' }, { status: 400 });
     }
-    if (subcategory && category && !categories[category as keyof typeof categories].includes(subcategory)) {
+
+    if (subcategory && category && !CATEGORIES[category as keyof typeof CATEGORIES].includes(subcategory)) {
       return NextResponse.json({ error: 'Invalid subcategory for this category' }, { status: 400 });
     }
 
@@ -77,6 +132,7 @@ export async function DELETE(
     
     // Check if user is admin
     const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

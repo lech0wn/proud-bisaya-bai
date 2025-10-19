@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
+import { CATEGORIES } from '@/app/components/Categories';
 
 //GET a published, non-archived article by slug (public)
 export async function GET(

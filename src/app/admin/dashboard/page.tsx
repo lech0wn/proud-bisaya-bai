@@ -204,7 +204,7 @@ export default function AdminDashboardPage() {
                 Filter
               </button>
               <Link
-                href="/admin/articles/create"
+                href="/admin/articles/new/metadata"
                 className="border-b border-gray-200 bg-red-500 flex items-center gap-2 text-white font-bold px-4 py-2 rounded transition-colors active:bg-red-900"
               >
                 Add Article
@@ -319,7 +319,7 @@ export default function AdminDashboardPage() {
                             View
                           </Link>
                           <Link
-                            href={`/admin/articles/${a.slug}/edit`}
+                            href={`/admin/articles/${a.slug}/metadata`}
                             className="bg-yellow-500 text-white font-bold px-13 py-2 rounded-lg text-center hover:bg-yellow-600 w-full"
                           >
                             Edit

@@ -1,15 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
+import { CATEGORIES } from '@/app/components/Categories';
 
-const categories = {
-  "Destinations": ["Cebu Highlights", "Beaches & Islands", "Mountain Escapes", "Heritage & History", "Hidden Gems", "Travel Itineraries"],
-  "Brands and Products": ["Homegrown Brands", "Fashion & Apparel", "Tech & Gadgets", "Beauty & Wellness", "Food Products", "Eco-Friendly & Sustainable"],
-  "Stories": ["Life in Cebu", "Resilience & Recovery", "Student Stories", "Entrepreneur Journeys", "Cultural Narratives", "Inspirational Profiles"],
-  "News and Entertainment": ["Breaking News Cebu", "Local Governance", "Festivals & Events", "Entertainment Buzz", "Music & Arts", "Sports", "Campus News"],
-  "Food": ["Cebu Favorites", "Street Food Finds", "Café & Coffee Spots", "Seafood Specials", "Sweet Treats & Desserts", "Food Reviews"]
-};
-
-// GET all articles (admin only - includes archived and unpublished)
 export async function GET(request: Request) {
   try {
     const supabase = await createClient();
@@ -73,10 +65,10 @@ export async function POST(request: Request) {
     const { title, slug, content, author, category, subcategory, thumbnail_url } = body;
 
     // Validate category and subcategory
-    if (!categories[category as keyof typeof categories]) {
+    if (!CATEGORIES[category as keyof typeof CATEGORIES]) {
       return NextResponse.json({ error: 'Invalid category' }, { status: 400 });
     }
-    if (subcategory && !categories[category as keyof typeof categories].includes(subcategory)) {
+    if (subcategory && !CATEGORIES[category as keyof typeof CATEGORIES].includes(subcategory)) {
       return NextResponse.json({ error: 'Invalid subcategory for this category' }, { status: 400 });
     }
 
