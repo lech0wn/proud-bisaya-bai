@@ -92,6 +92,8 @@ const components: Config["components"] = {
         category: string;
         subcategory?: string;
         thumbnail_url?: string;
+        category_slug: string;
+        subcategory_slug?: string;
     } | null>(null);
 
     useEffect(() => {
@@ -122,6 +124,8 @@ const components: Config["components"] = {
                 category: article.category,
                 subcategory: article.subcategory,
                 thumbnail_url: article.thumbnail_url,
+                category_slug: article.category_slug,
+                subcategory_slug: article.subcategory_slug,
             });
         }
 
@@ -201,6 +205,8 @@ const components: Config["components"] = {
             category: metadata.category,
             subcategory: metadata.subcategory || undefined,
             thumbnail_url: metadata.thumbnail_url || undefined,
+            category_slug: metadata.category_slug,
+            subcategory_slug: metadata.subcategory_slug || undefined,
             content: JSON.stringify(puckData),
         };
 

@@ -87,7 +87,7 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { title, slug: newSlug, content, author, category, subcategory, thumbnail_url } = body;
+    const { title, slug: newSlug, content, author, category, subcategory, thumbnail_url, category_slug, subcategory_slug } = body;
 
     // Validate category and subcategory if provided
     if (category && !CATEGORIES[category as keyof typeof CATEGORIES]) {
@@ -108,7 +108,9 @@ export async function PUT(
         category,
         subcategory,
         thumbnail_url,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
+        category_slug,
+        subcategory_slug
       })
       .eq('slug', params.slug)
       .select()

@@ -27,6 +27,8 @@ export default function ArticleMetadataPage() {
     const [category, setCategory] = useState("");
     const [subcategory, setSubcategory] = useState("");
     const [thumbnail, setThumbnail] = useState("");
+    const [categorySlug, setCategorySlug] = useState("");
+    const [subcategorySlug, setSubcategorySlug] = useState("");
 
     const availableSubcategories = category
         ? CATEGORIES[category as keyof typeof CATEGORIES] || []
@@ -54,6 +56,8 @@ export default function ArticleMetadataPage() {
         setCategory(article.category || "");
         setSubcategory(article.subcategory || "");
         setThumbnail(article.thumbnail_url || "");
+        setCategorySlug(article.category_slug || "");
+        setSubcategorySlug(article.subcategory_slug || "");
         } catch (error: any) {
         console.error("Error fetching article:", error);
         alert(`Failed to load article: ${error.message}`);
@@ -163,6 +167,8 @@ export default function ArticleMetadataPage() {
             category: category,
             subcategory: subcategory || undefined,
             thumbnail_url: thumbnail.trim() || undefined,
+            category_slug: categorySlug,
+            subcategory_slug: subcategorySlug,
         };
 
         sessionStorage.setItem("articleMetadata", JSON.stringify(metadata));
@@ -216,6 +222,10 @@ export default function ArticleMetadataPage() {
             thumbnailInputRef={thumbnailInputRef}
             onImageUpload={handleImageUpload}
             onThumbnailUpload={handleThumbnailUpload}
+            categorySlug={categorySlug.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}
+            setCategorySlug={setCategorySlug}
+            subcategorySlug={subcategorySlug.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}
+            setSubcategorySlug={setSubcategorySlug}
         />
             <div className="bg-white">
                 <LoadingOverlay
