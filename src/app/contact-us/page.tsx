@@ -74,7 +74,7 @@ export default function ContactUsPage() {
           <a
             href="#contact-form"
             onClick={goToContact}
-            className="mt-6 inline-flex items-center rounded-[10px] bg-amber-400 px-8 py-4 text-base font-semibold text-black shadow hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400/60"
+            className="mt-6 inline-flex items-center rounded-[10px] bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] text-white px-8 py-4 text-base font-semibold cursor-pointer transition-transform transform hover:scale-101 hover:shadow-xl"
           >
             Get featured now!
           </a>
@@ -88,11 +88,11 @@ export default function ContactUsPage() {
               <div
                 key={pkg.name}
                 className={`relative flex h-full flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm ${
-                  isBest ? "ring-2 ring-amber-400" : ""
+                  isBest ? "gradient-ring" : ""
                 }`}
               >
                 {isBest && (
-                  <div className="absolute -top-3 right-4 rounded-[10] bg-amber-400 px-5 py-2 text-[12px] font-semibold text-black shadow">
+                  <div className="absolute -top-3 right-4 rounded-[10] bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] text-white px-5 py-2 text-[12px] font-semibold shadow">
                     Best Deal
                   </div>
                 )}
@@ -110,7 +110,7 @@ export default function ContactUsPage() {
                 <ul className="mt-4 space-y-3">
                   {pkg.features.map((f, idx) => (
                     <li key={idx} className="flex items-start gap-2">
-                      <span className="mt-1 inline-block h-1.5 w-1.5 rounded-full bg-amber-400" />
+                      <span className="mt-1 inline-block h-1.5 w-1.5 rounded-full bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)]" />
                       <div>
                         <p className="text-sm font-semibold text-gray-800">
                           {f.text}
@@ -129,7 +129,7 @@ export default function ContactUsPage() {
                 <a
                   href="#contact-form"
                   onClick={goToContact}
-                  className="mt-6 w-full rounded-md bg-amber-400 px-4 py-2 text-sm font-semibold text-black hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400/60 text-center"
+                  className="mt-6 w-full rounded-md bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] text-white px-4 py-2 text-sm font-semibold text-center cursor-pointer transition-transform transform hover:scale-101 hover:shadow-lg"
                 >
                   {pkg.cta}
                 </a>
@@ -148,7 +148,7 @@ export default function ContactUsPage() {
           {/* Left column */}
           <aside className="lg:col-span-2">
             <h3 className="mb-[30px] text-5xl font-extrabold text-gray-900">
-              <span className="mr-2 inline-block rounded-md bg-amber-400 px-1.5 py-0.5 align-middle"></span>
+              <span className="mr-2 inline-block rounded-md bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] px-1.5 py-0.5 align-middle"></span>
               Contact Us
             </h3>
             <p className="mb-[30px] text-sm text-gray-600">
@@ -157,7 +157,6 @@ export default function ContactUsPage() {
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
               nisi ut aliquip ex ea commodo consequat.
             </p>
-
             <ul className="mt-6 space-y-3 text-sm">
               <li className="flex items-center gap-3">
                 <span className="inline-flex h-8 w-8 items-center justify-center">
@@ -224,7 +223,7 @@ export default function ContactUsPage() {
                     <input
                       name="fullName"
                       required
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none ring-amber-300 placeholder:text-gray-400 focus:ring-2"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none ring-black-300 placeholder:text-gray-400 focus:ring-2"
                     />
                   </div>
                   <div>
@@ -244,7 +243,7 @@ export default function ContactUsPage() {
                       <input
                         name="phone"
                         placeholder="9xx xxx xxxx"
-                        className="w-full rounded-r-md border border-l-0 border-gray-300 px-3 py-2 text-sm outline-none ring-amber-300 placeholder:text-gray-400 focus:ring-2"
+                        className="w-full rounded-r-md border border-l-0 border-gray-300 px-3 py-2 text-sm outline-none ring-black-300 placeholder:text-gray-400 focus:ring-2"
                       />
                     </div>
                   </div>
@@ -257,7 +256,7 @@ export default function ContactUsPage() {
                     </label>
                     <input
                       name="company"
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none ring-amber-300 placeholder:text-gray-400 focus:ring-2"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none ring-black-300 placeholder:text-gray-400 focus:ring-2"
                     />
                   </div>
                   <div>
@@ -269,7 +268,7 @@ export default function ContactUsPage() {
                       name="email"
                       required
                       placeholder="proudbisayabai@gmail.com"
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none ring-amber-300 placeholder:text-gray-400 focus:ring-2"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none ring-black-300 placeholder:text-gray-400 focus:ring-2"
                     />
                   </div>
                 </div>
@@ -282,13 +281,13 @@ export default function ContactUsPage() {
                     name="message"
                     rows={5}
                     placeholder="Type your message here..."
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none ring-amber-300 placeholder:text-gray-400 focus:ring-2"
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none ring-black-300 placeholder:text-gray-400 focus:ring-2"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="mt-2 w-full rounded-md bg-amber-400 px-4 py-2.5 text-sm font-semibold text-black shadow hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400/60"
+                  className="mt-2 w-full rounded-md bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] text-white px-4 py-2.5 text-sm font-semibold cursor-pointer transition-transform transform hover:scale-101 hover:shadow-lg"
                 >
                   Send message
                 </button>

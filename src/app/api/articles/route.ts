@@ -1,20 +1,11 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 
-export const categories = {
-  "Destinations": ["Cebu Highlights", "Beaches & Islands", "Mountain Escapes", "Heritage & History", "Hidden Gems", "Travel Itineraries"],
-  "Brands and Products": ["Homegrown Brands", "Fashion & Apparel", "Tech & Gadgets", "Beauty & Wellness", "Food Products", "Eco-Friendly & Sustainable"],
-  "Stories": ["Life in Cebu", "Resilience & Recovery", "Student Stories", "Entrepreneur Journeys", "Cultural Narratives", "Inspirational Profiles"],
-  "News and Entertainment": ["Breaking News Cebu", "Local Governance", "Festivals & Events", "Entertainment Buzz", "Music & Arts", "Sports", "Campus News"],
-  "Food": ["Cebu Favorites", "Street Food Finds", "Café & Coffee Spots", "Seafood Specials", "Sweet Treats & Desserts", "Food Reviews"]
-};
-
 // GET all articles (public)
 export async function GET(request: Request) {
   try {
     const supabase = await createClient();
     const { searchParams } = new URL(request.url);
-    
     const category = searchParams.get('category');
     const subcategory = searchParams.get('subcategory');
     const page = parseInt(searchParams.get('page') || '1');
@@ -24,6 +15,8 @@ export async function GET(request: Request) {
     let query = supabase
       .from('articles')
       .select('*', { count: 'exact' })
+      .eq('isPublished', true)
+      .eq('isArchived', false)
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
 

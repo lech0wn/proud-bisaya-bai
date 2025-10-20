@@ -1,8 +1,8 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
-import { categories } from '../route';
+import { CATEGORIES } from '@/app/components/Categories';
 
-// GET single article by slug (public)
+//GET a published, non-archived article by slug (public)
 export async function GET(
   request: Request,
   { params }: { params: { slug: string } }
@@ -10,13 +10,18 @@ export async function GET(
   try {
     const supabase = await createClient();
     
+    const resolvedParams = await params;
+    
     const { data, error } = await supabase
       .from('articles')
       .select('*')
-      .eq('slug', params.slug)
+      .eq('slug', resolvedParams.slug)
+      .eq('isPublished', true)
+      .eq('isArchived', false)
       .single();
 
     if (error) throw error;
+
     if (!data) {
       return NextResponse.json({ error: 'Article not found' }, { status: 404 });
     }
@@ -26,4 +31,3 @@ export async function GET(
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-

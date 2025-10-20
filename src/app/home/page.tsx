@@ -24,7 +24,11 @@ const Home: React.FC = async () => {
   const supabase = await createClient();
   const { data: articlesData } = await supabase
     .from("articles")
-    .select("title, slug, thumbnail_url, created_at")
+    .select(
+      "title, slug, thumbnail_url, created_at, category, subcategory, category_slug, subcategory_slug"
+    )
+    .eq("isPublished", true)
+    .eq("isArchived", false) //exclude archived posts
     .order("created_at", { ascending: false })
     .limit(8);
 
@@ -92,23 +96,27 @@ const Home: React.FC = async () => {
         {/* Hero Banner */}
         <div
           className="relative h-screen bg-cover bg-center "
-          style={{ backgroundImage: "url('/images/hero_image.webp')" }}
+          style={{ backgroundImage: "url('/images/banner.webp')" }}
         >
-          {/* Overlay
-          <div className="absolute inset-0 bg-black bg-opacity-50"></div> */}
+          {
+            /* Overlay (not sure about the opacity for now)*/
+            <div className="absolute inset-0 bg-black/40"></div>
+          }
           {/* Content */}
           <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4">
-            <h1 className="text-5xl md:text-6xl font-bold">
-              Proud <span className="text-orange-500">Bisaya Bai</span>
+            <h1 className="text-9xl md:text-10xl font-bold bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] bg-clip-text text-transparent leading-tight">
+              Proud Bisaya Bai
             </h1>
             <p className="mt-4 text-lg md:text-xl max-w-2xl">
               Your daily guide to the best of Central Visayas. Discover
               authentic Bisaya food, travel routes, and stories from Cebu and
               beyond.
             </p>
-            <button className="mt-6 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-lg">
-              Get Featured
-            </button>
+            <Link href="/contact-us">
+              <button className="mt-6 px-6 py-3 bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] text-white font-semibold rounded-lg shadow-lg cursor-pointer transition-transform transform hover:scale-105 hover:shadow-xl active:scale-95">
+                Get Featured
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -139,27 +147,31 @@ const Home: React.FC = async () => {
 
             {/* Articles */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-black">
-              {(articlesData || []).map((article) => (
-                <Link
-                  key={article.slug}
-                  href={`/articles/${article.slug}`}
-                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-                >
-                  <img
-                    src={article.thumbnail_url || "/images/articles.webp"}
-                    alt={article.title}
-                    className="w-full h-40 object-cover"
-                  />
-                  <div className="p-4">
-                    <h4 className="text-lg font-semibold line-clamp-2">
-                      {article.title}
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      {new Date(article.created_at).toLocaleDateString()}
-                    </p>
-                  </div>
-                </Link>
-              ))}
+              {(articlesData || []).map((article) => {
+                const href = `/articles/${article.category_slug}/${article.subcategory_slug}/${article.slug}`;
+                return (
+                  <Link
+                    key={article.slug}
+                    href={href}
+                    className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                  >
+                    <img
+                      src={article.thumbnail_url || "/images/articles.webp"}
+                      alt={article.title}
+                      className="w-full h-40 object-cover"
+                      loading="lazy"
+                    />
+                    <div className="p-4">
+                      <h4 className="text-lg font-semibold line-clamp-2">
+                        {article.title}
+                      </h4>
+                      <p className="text-sm text-gray-500">
+                        {new Date(article.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -168,14 +180,14 @@ const Home: React.FC = async () => {
         <section className="bg-white py-8">
           <div className="max-w-5xl mx-auto px-4">
             <h2 className="text-xl font-bold mb-4 text-black">Breaking News</h2>
-            <div className="bg-yellow-400 p-4 rounded-lg shadow-md">
+            <div className="bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] p-4 rounded-lg shadow-md">
               {breakingNews.map((news, index) => (
                 <div
                   key={index}
                   className="flex justify-between items-center mb-2 last:mb-0"
                 >
-                  <p className="text-black font-semibold">{news.title}</p>
-                  <p className="text-black font-bold">{news.time}</p>
+                  <p className="text-white font-semibold">{news.title}</p>
+                  <p className="text-white font-bold">{news.time}</p>
                 </div>
               ))}
             </div>

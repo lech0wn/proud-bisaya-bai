@@ -1,13 +1,7 @@
-export const categories = {
-  "Destinations": ["Cebu Highlights", "Beaches & Islands", "Mountain Escapes", "Heritage & History", "Hidden Gems", "Travel Itineraries"],
-  "Brands and Products": ["Homegrown Brands", "Fashion & Apparel", "Tech & Gadgets", "Beauty & Wellness", "Food Products", "Eco-Friendly & Sustainable"],
-  "Stories": ["Life in Cebu", "Resilience & Recovery", "Student Stories", "Entrepreneur Journeys", "Cultural Narratives", "Inspirational Profiles"],
-  "News and Entertainment": ["Breaking News Cebu", "Local Governance", "Festivals & Events", "Entertainment Buzz", "Music & Arts", "Sports", "Campus News"],
-  "Food": ["Cebu Favorites", "Street Food Finds", "Café & Coffee Spots", "Seafood Specials", "Sweet Treats & Desserts", "Food Reviews"]
-};
+import { CATEGORIES } from '@/app/components/Categories';
 
-export type CategoryKey = keyof typeof categories;
-export type SubcategoryValue<T extends CategoryKey> = typeof categories[T][number];
+export type CategoryKey = keyof typeof CATEGORIES;
+export type SubcategoryValue<T extends CategoryKey> = typeof CATEGORIES[T][number];
 
 export interface Article {
   id: string;
@@ -17,6 +11,8 @@ export interface Article {
   author: string;
   category: CategoryKey;
   subcategory?: string;
+  category_slug: string;
+  subcategory_slug: string;
   thumbnail_url?: string;
   created_at: string;
   updated_at: string;
