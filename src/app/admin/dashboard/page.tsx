@@ -522,7 +522,7 @@ export default function AdminDashboardPage() {
                         {a.category ?? "Uncategorized"}
                         {a.subcategory && (
                           <span className="block text-xs text-gray-500">
-                            : {a.subcategory}
+                            {a.subcategory}
                           </span>
                         )}
                       </td>
