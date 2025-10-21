@@ -1,51 +1,54 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 import Footer from "@/app/components/Footer";
 import Header from "../components/Header";
 
 export default function ContactUsPage() {
   const packages = [
     {
-      name: "Package A",
-      price: "₱ 5,000",
+      name: "Media & Content Creation",
       features: [
-        { text: "2 featured FACEBOOK posts" },
-        { text: "1 written article", note: "will be written by our team" },
+        { text: "Video, Photography, and Graphic Design" },
+        { text: "Social Media Management" },
+        {
+          text: "Vlogs and Short-Form Content",
+          note: "(Reels, Tiktok, YouTube Shorts)",
+        },
+        { text: "Branding and Visual Storytelling" },
       ],
       cta: "Get Started",
     },
     {
-      name: "Package B",
-      price: "₱ 10,000",
+      name: "Promotions & Digital Marketing",
       features: [
-        { text: "2 featured FACEBOOK posts" },
-        { text: "1 reel/minivlog FACEBOOK or TIKTOK post" },
-        {
-          text: "PHOTOSHOOT",
-          note: "Our team will visit to shoot your product or place",
-        },
+        { text: "Local Business Features" },
+        { text: "Tourism and Cultural Campaigns" },
+        { text: "Influencer Collaborations" },
+        { text: "Online Giveaways and Product Launches" },
       ],
       cta: "Get Started",
     },
     {
-      name: "Package C",
-      price: "₱ 20,000",
+      name: "Events & Coverage",
       features: [
-        { text: "3 featured FACEBOOK posts" },
-        { text: "1 reel/minivlog FACEBOOK or TIKTOK post" },
-        {
-          text: "PHOTOSHOOT",
-          note: "Our team will visit to shoot your product or place",
-        },
-        { text: "FEATURE ARTICLE on Proudbisayabai.ph" },
+        { text: "Event Hosting", note: "(Onsite and Online)" },
+        { text: "Coverage of Festivals, Launches, and Ceremonies" },
+        { text: "Press and Media Kit Preparation" },
       ],
       cta: "Get Started",
-      highlight: "best" as const,
+    },
+    {
+      name: "Photography & Videography",
+      features: [
+        { text: "Lifestyle and Portrait Sessions" },
+        { text: "Product Photography" },
+        { text: "Aerial Drone Coverage" },
+        { text: "Editorial and Conceptual Shots" },
+      ],
+      cta: "Get Started",
     },
   ];
 
-  // optional: smooth scroll for older browsers that ignore CSS scroll-behavior
   const goToContact = (e?: React.MouseEvent) => {
     e?.preventDefault();
     document
@@ -58,154 +61,140 @@ export default function ContactUsPage() {
       <Header />
 
       {/* Advertising Packages */}
-      <section className="w-full">
-        {/* Title */}
-        <div className="mx-auto mt-4 max-w-5xl px-4 text-center">
-          <h2 className="mt-12 text-3xl font-semibold text-gray-900">
-            Join our growing community: Advertise with us today
+      <section className="py-16">
+        <div className="mx-auto max-w-5xl px-4 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+            Join our growing community — Advertise with us today
           </h2>
-          <p className="mt-1 text-s text-gray-500">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          <p className="mt-2 text-sm text-gray-500">
+            Showcase your brand to a vibrant, engaged Bisaya audience.
           </p>
+
+          <div className="flex justify-center mt-6">
+            <a
+              href="#contact-form"
+              onClick={goToContact}
+              className="inline-flex items-center rounded-lg bg-[var(--custom-brown)] px-8 py-4 text-white text-base font-semibold shadow-sm transition-transform transform hover:scale-105 hover:shadow-xl"
+            >
+              Get featured now!
+            </a>
+          </div>
         </div>
 
-        {/* Get Featured -> link to contact form */}
-        <div className="flex justify-center">
-          <a
-            href="#contact-form"
-            onClick={goToContact}
-            className="mt-6 inline-flex items-center rounded-[10px] bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] text-white px-8 py-4 text-base font-semibold cursor-pointer transition-transform transform hover:scale-101 hover:shadow-xl"
-          >
-            Get featured now!
-          </a>
-        </div>
+        {/* Our Services (has grayish background) */}
+        <div className="mt-12 bg-gray-50 py-12">
+          <div className="mx-auto max-w-5xl px-4 text-center">
+            <h2 className="text-3xl font-bold text-gray-900">Our Services</h2>
+            <p className="mt-2 text-gray-600 max-w-2xl mx-auto">
+              Explore a variety of professional media and marketing services
+              designed to amplify your brand presence and connect with your
+              audience.
+            </p>
+          </div>
 
-        {/* Cards */}
-        <div className="mx-auto mt-6 grid max-w-5xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 lg:grid-cols-3">
-          {packages.map((pkg) => {
-            const isBest = pkg.highlight === "best";
-            return (
+          {/* Package Cards */}
+          <div className="mx-auto mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 max-w-5xl px-4">
+            {packages.map((pkg) => (
               <div
                 key={pkg.name}
-                className={`relative flex h-full flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm ${
-                  isBest ? "gradient-ring" : ""
-                }`}
+                className="flex flex-col justify-between rounded-xl border border-gray-200 bg-white p-8 shadow-md transition-transform transform hover:-translate-y-1 hover:shadow-lg"
               >
-                {isBest && (
-                  <div className="absolute -top-3 right-4 rounded-[10] bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] text-white px-5 py-2 text-[12px] font-semibold shadow">
-                    Best Deal
-                  </div>
-                )}
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+                    {pkg.name}
+                  </h3>
 
-                <h3 className="text-sm font-semibold text-gray-800">
-                  {pkg.name}
-                </h3>
-
-                <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-3xl font-extrabold text-gray-900">
-                    {pkg.price}
-                  </span>
+                  <ul className="space-y-3">
+                    {pkg.features.map((f, idx) => (
+                      <li key={idx} className="flex items-start gap-3">
+                        <span className="mt-2 inline-block h-1.5 w-1.5 rounded-full bg-black flex-shrink-0" />
+                        <div>
+                          <p className="text-sm font-semibold text-gray-800">
+                            {f.text}
+                          </p>
+                          {f.note && (
+                            <p className="text-xs text-gray-500">{f.note}</p>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-
-                <ul className="mt-4 space-y-3">
-                  {pkg.features.map((f, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="mt-1 inline-block h-1.5 w-1.5 rounded-full bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)]" />
-                      <div>
-                        <p className="text-sm font-semibold text-gray-800">
-                          {f.text}
-                        </p>
-                        {"note" in f && f.note && (
-                          <p className="text-xs text-gray-500">{f.note}</p>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Spacer pushes the button to the bottom so all align */}
-                <div className="flex-1" />
 
                 <a
                   href="#contact-form"
                   onClick={goToContact}
-                  className="mt-6 w-full rounded-md bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] text-white px-4 py-2 text-sm font-semibold text-center cursor-pointer transition-transform transform hover:scale-101 hover:shadow-lg"
+                  className="mt-8 w-full text-center rounded-md bg-[var(--custom-orange)] text-white px-4 py-3 text-sm font-semibold transition-transform transform hover:scale-105 hover:shadow-lg"
                 >
                   {pkg.cta}
                 </a>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Contact Us section (target anchor) */}
+      {/* Contact Section */}
       <section
         id="contact-form"
-        className="scroll-mt-34 mx-auto mt-12 max-w-6xl px-4"
+        className="mx-auto max-w-6xl px-4 py-20 border-t border-gray-100"
       >
-        <div className="mt-20 grid grid-cols-1 gap-8 lg:grid-cols-5">
-          {/* Left column */}
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-5">
+          {/* Left */}
           <aside className="lg:col-span-2">
-            <h3 className="mb-[30px] text-5xl font-extrabold text-gray-900">
-              <span className="mr-2 inline-block rounded-md bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] px-1.5 py-0.5 align-middle"></span>
+            <h3 className="text-4xl font-extrabold text-gray-900 mb-6">
+              <span className="mr-2 inline-block rounded-md bg-[var(--custom-orange)] px-1.5 py-0.5"></span>
               Contact Us
             </h3>
-            <p className="mb-[30px] text-sm text-gray-600">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
+            <p className="text-sm text-gray-600 mb-6">
+              Let’s collaborate! Whether you’re looking to advertise, sponsor,
+              or share your story — we’d love to hear from you.
             </p>
-            <ul className="mt-6 space-y-3 text-sm">
+            <ul className="space-y-3 text-sm">
               <li className="flex items-center gap-3">
-                <span className="inline-flex h-8 w-8 items-center justify-center">
-                  <img
-                    src="/images/yellow-phone.webp"
-                    alt="Phone"
-                    width={20}
-                    height={20}
-                  />
-                </span>
+                <img
+                  src="/images/yellow-phone.webp"
+                  alt="Phone"
+                  width={20}
+                  height={20}
+                />
                 <span className="text-gray-800">0966 176 5800</span>
               </li>
               <li className="flex items-center gap-3">
-                <span className="inline-flex h-8 w-8 items-center justify-center">
-                  <img
-                    src="/images/yellow-email.webp"
-                    alt="Phone"
-                    width={20}
-                    height={20}
-                  />
-                </span>
+                <img
+                  src="/images/yellow-email.webp"
+                  alt="Email"
+                  width={20}
+                  height={20}
+                />
                 <span className="text-gray-800">
                   proudbisayabai.ph@gmail.com
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <span className="inline-flex h-8 w-8 items-center justify-center">
-                  <img
-                    src="/images/yellow-facebook.webp"
-                    alt="Phone"
-                    width={20}
-                    height={20}
-                  />
-                </span>
+                <img
+                  src="/images/yellow-facebook.webp"
+                  alt="Facebook"
+                  width={20}
+                  height={20}
+                />
                 <span className="text-gray-800">Proud Bisaya Bai</span>
               </li>
             </ul>
           </aside>
 
-          {/* Right column - form card */}
+          {/* Right - Form */}
           <div className="lg:col-span-3">
-            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-md">
-              <h4 className="text-lg font-semibold text-gray-900">
+            <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-md">
+              <h4 className="text-xl font-semibold text-gray-900 mb-2">
                 We’d love to hear from you!
               </h4>
-              <p className="mb-4 text-sm text-gray-600">Get in touch</p>
+              <p className="text-sm text-gray-600 mb-6">
+                Send us a message and we’ll get back soon.
+              </p>
 
               <form
-                className="space-y-4"
+                className="space-y-5"
                 onSubmit={(e) => {
                   e.preventDefault();
                   const data = Object.fromEntries(
@@ -215,26 +204,26 @@ export default function ContactUsPage() {
                   console.log("Form payload:", data);
                 }}
               >
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-gray-700">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
                       Full Name
                     </label>
                     <input
                       name="fullName"
                       required
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none ring-black-300 placeholder:text-gray-400 focus:ring-2"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[var(--custom-orange)] outline-none"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-gray-700">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
                       Phone number
                     </label>
                     <div className="flex">
                       <select
                         name="dial"
-                        className="w-24 rounded-l-md border border-gray-300 bg-gray-50 px-2 py-2 text-sm outline-none"
                         defaultValue="+63"
+                        className="w-24 rounded-l-md border border-gray-300 bg-gray-50 px-2 py-2 text-sm outline-none"
                       >
                         <option value="+63">+63</option>
                         <option value="+1">+1</option>
@@ -243,24 +232,24 @@ export default function ContactUsPage() {
                       <input
                         name="phone"
                         placeholder="9xx xxx xxxx"
-                        className="w-full rounded-r-md border border-l-0 border-gray-300 px-3 py-2 text-sm outline-none ring-black-300 placeholder:text-gray-400 focus:ring-2"
+                        className="w-full rounded-r-md border border-l-0 border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--custom-orange)]"
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-gray-700">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
                       Company
                     </label>
                     <input
                       name="company"
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none ring-black-300 placeholder:text-gray-400 focus:ring-2"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[var(--custom-orange)] outline-none"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-gray-700">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
                       Email
                     </label>
                     <input
@@ -268,26 +257,26 @@ export default function ContactUsPage() {
                       name="email"
                       required
                       placeholder="proudbisayabai@gmail.com"
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none ring-black-300 placeholder:text-gray-400 focus:ring-2"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[var(--custom-orange)] outline-none"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-gray-700">
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
                     Your message
                   </label>
                   <textarea
                     name="message"
                     rows={5}
                     placeholder="Type your message here..."
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none ring-black-300 placeholder:text-gray-400 focus:ring-2"
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[var(--custom-orange)] outline-none"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="mt-2 w-full rounded-md bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] text-white px-4 py-2.5 text-sm font-semibold cursor-pointer transition-transform transform hover:scale-101 hover:shadow-lg"
+                  className="w-full mt-4 rounded-md bg-[var(--custom-brown)] text-white px-4 py-3 text-sm font-semibold transition-transform transform hover:scale-105 hover:shadow-lg"
                 >
                   Send message
                 </button>

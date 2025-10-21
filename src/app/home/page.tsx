@@ -3,21 +3,35 @@ import React from "react";
 import Link from "next/link";
 import Footer from "@/app/components/Footer";
 import Header from "@/app/components/Header";
+import LatestUpdateCard from "../components/LatestUpdateCard";
 import { createClient } from "@/utils/supabase/server";
 
 const Home: React.FC = async () => {
   const stories = [
     {
       title: "Destinations",
-      image: "/images/news.jpg",
+      image: "/images/destinations_image.webp",
+      slug: "destinations",
     },
     {
       title: "News and Entertainment",
-      image: "/images/travel.jpg",
+      image: "/images/news_image.webp",
+      slug: "news-and-entertainment",
     },
     {
       title: "Food",
-      image: "/images/food.jpg",
+      image: "/images/food_image.webp",
+      slug: "food",
+    },
+    {
+      title: "Brands and Products",
+      image: "/images/brands_image.webp",
+      slug: "brands-and-products",
+    },
+    {
+      title: "Stories",
+      image: "/images/stories_image.webp",
+      slug: "stories",
     },
   ];
 
@@ -25,7 +39,7 @@ const Home: React.FC = async () => {
   const { data: articlesData } = await supabase
     .from("articles")
     .select(
-      "title, slug, thumbnail_url, created_at, category, subcategory, category_slug, subcategory_slug"
+      "title, slug, thumbnail_url, created_at, author, category, subcategory, category_slug, subcategory_slug"
     )
     .eq("isPublished", true)
     .eq("isArchived", false) //exclude archived posts
@@ -40,24 +54,6 @@ const Home: React.FC = async () => {
     {
       title: "TRAFFIC ALERT: Flooding in N. Busay Road",
       time: "10:15 AM",
-    },
-  ];
-
-  const latestUpdates = [
-    {
-      title: "Cebu Celebrates Sinulog",
-      date: "Sept 27, 2025",
-      image: "/images/latest1.jpg",
-    },
-    {
-      title: "Happy New Year Cebu!",
-      date: "Sept 27, 2025",
-      image: "/images/latest2.jpg",
-    },
-    {
-      title: "Car Crash at Medellin",
-      date: "Sept 27, 2025",
-      image: "/images/latest3.jpg",
     },
   ];
 
@@ -131,21 +127,27 @@ const Home: React.FC = async () => {
             {/* Categories */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
               {stories.map((story, index) => (
-                <div
+                <Link
                   key={index}
-                  className="relative h-40 bg-cover bg-center rounded-lg shadow-lg"
+                  href={`/articles/${story.slug}`}
+                  className="relative h-40 bg-cover bg-center rounded-lg shadow-lg group block"
                   style={{ backgroundImage: `url(${story.image})` }}
                 >
-                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                  <span className="absolute inset-0 bg-black/40 rounded-lg group-hover:bg-black/60 transition-colors" />
+                  <span className="relative z-10 flex h-full items-center justify-center">
                     <h3 className="text-white text-xl font-semibold">
                       {story.title}
                     </h3>
-                  </div>
-                </div>
+                  </span>
+                </Link>
               ))}
             </div>
 
             {/* Articles */}
+            {/* Section Title */}
+            <h2 className="text-3xl font-bold text-center mb-8 text-black">
+              All Articles
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-black">
               {(articlesData || []).map((article) => {
                 const href = `/articles/${article.category_slug}/${article.subcategory_slug}/${article.slug}`;
@@ -194,53 +196,42 @@ const Home: React.FC = async () => {
           </div>
         </section>
 
-        {/* Latest Updates and Editor's Picks */}
         <section className="bg-gray-100 py-8">
-          <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Latest Updates */}
-            <div>
-              <h3 className="text-lg font-bold mb-4 text-black">
-                Karon: Latest Updates and News
-              </h3>
-              {latestUpdates.map((update, index) => (
-                <div
-                  key={index}
-                  className="flex items-center mb-4 bg-white p-4 rounded-lg shadow-md"
-                >
-                  <img
-                    src={update.image}
-                    alt={update.title}
-                    className="w-20 h-20 object-cover rounded-lg mr-4"
+          <div className="max-w-5xl mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Latest Updates */}
+              <div>
+                <h3 className="text-lg font-bold mb-4 text-black">
+                  Karon: Latest Updates and News
+                </h3>
+                {(articlesData || []).slice(0, 3).map((article, index) => (
+                  <LatestUpdateCard
+                    key={index}
+                    image={article.thumbnail_url || "/images/articles.webp"}
+                    title={article.title}
+                    date={new Date(article.created_at).toLocaleDateString()}
+                    author={article.author}
                   />
-                  <div>
-                    <h4 className="text-black font-semibold">{update.title}</h4>
-                    <p className="text-gray-500 text-sm">{update.date}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
 
-            {/* Editor's Picks */}
-            <div>
-              <h3 className="text-lg font-bold mb-4 text-black">
-                Editor's Picks
-              </h3>
-              {editorsPicks.map((pick, index) => (
-                <div
-                  key={index}
-                  className="flex items-center mb-4 bg-white p-4 rounded-lg shadow-md"
-                >
-                  <img
-                    src={pick.image}
-                    alt={pick.title}
-                    className="w-20 h-20 object-cover rounded-lg mr-4"
+              {/* Editor's Picks */}
+              <div>
+                <h3 className="text-lg font-bold mb-4 text-black">
+                  Editor's Picks
+                </h3>
+                <h3 className="text-sm mb-4 text-gray-400">
+                  No articles found.
+                </h3>
+                {/* {editorsPicks.map((pick, index) => (
+                  <LatestUpdateCard
+                    key={index}
+                    image={pick.image}
+                    title={pick.title}
+                    date={pick.date}
                   />
-                  <div>
-                    <h4 className="text-black font-semibold">{pick.title}</h4>
-                    <p className="text-gray-500 text-sm">{pick.date}</p>
-                  </div>
-                </div>
-              ))}
+                ))} */}
+              </div>
             </div>
           </div>
         </section>

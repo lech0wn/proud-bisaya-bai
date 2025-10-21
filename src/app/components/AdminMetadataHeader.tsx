@@ -26,6 +26,10 @@ interface ArticleMetadataHeaderProps {
     thumbnailInputRef: React.RefObject<HTMLInputElement | null>;
     onImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onThumbnailUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    categorySlug: string;
+    setCategorySlug: (slug: string) => void;
+    subcategorySlug: string;
+    setSubcategorySlug: (slug: string) => void;
 }
 
     export function ArticleMetadataHeader({
@@ -52,6 +56,10 @@ interface ArticleMetadataHeaderProps {
     thumbnailInputRef,
     onImageUpload,
     onThumbnailUpload,
+    categorySlug,
+    setCategorySlug,
+    subcategorySlug,
+    setSubcategorySlug,
     }: ArticleMetadataHeaderProps) {
     const router = useRouter();
 
@@ -148,7 +156,10 @@ interface ArticleMetadataHeaderProps {
                 </label>
                 <select
                     value={category}
-                    onChange={(e) => setCategory(e.target.value)}
+                    onChange={(e) => {
+                        setCategory(e.target.value);
+                        setCategorySlug(e.target.value.toLowerCase().replace(/\s+/g, '-'));
+                    }}
                     className="w-full border border-gray-300 rounded-lg px-3 py-3 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                 >
@@ -169,7 +180,10 @@ interface ArticleMetadataHeaderProps {
                 </label>
                 <select
                     value={subcategory}
-                    onChange={(e) => setSubcategory(e.target.value)}
+                    onChange={(e) => {
+                        setSubcategory(e.target.value);
+                        setSubcategorySlug(e.target.value.toLowerCase().replace(/\s+/g, '-'));
+                    }}
                     disabled={!category}
                     className="w-full border border-gray-300 rounded-lg px-3 py-3 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-500"
                 >

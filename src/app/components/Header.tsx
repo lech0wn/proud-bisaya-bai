@@ -9,11 +9,12 @@ type NavItem = {
 };
 
 const defaultItems: NavItem[] = [
-  { label: "Destinations", href: "/destinations" },
-  { label: "Stories", href: "/stories" },
-  { label: "Food", href: "/food" },
-  { label: "Brand and Products", href: "/brand-and-products" },
-  { label: "News and Entertainment", href: "/news-and-entertainment" },
+  { label: "Home", href: "/home" },
+  { label: "Destinations", href: "/articles/destinations" },
+  { label: "Stories", href: "/articles/stories" },
+  { label: "Food", href: "/articles/food" },
+  { label: "Brands and Products", href: "/articles/brands-and-products" },
+  { label: "News and Entertainment", href: "/articles/news-and-entertainment" },
 ];
 
 export default function Navbar({
@@ -32,12 +33,13 @@ export default function Navbar({
 
   return (
     <>
-      {/* Header*/}
+      {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200">
         <div className="px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
           </div>
-          {/* Burger Menu Button */}
+
+          {/* Burger Menu */}
           <button
             aria-label={isOpen ? "Close menu" : "Open menu"}
             onClick={() => setIsOpen((v) => !v)}
@@ -45,7 +47,7 @@ export default function Navbar({
             title={isOpen ? "Close" : "Open"}
           >
             <img
-              src={isOpen ? "/images/burger.webp" : "/images/burger.webp"}
+              src="/images/burger.webp"
               alt={isOpen ? "Close menu" : "Open menu"}
               width={30}
               height={30}
@@ -55,7 +57,7 @@ export default function Navbar({
         </div>
       </div>
 
-      {/* Navigation Bar */}
+      {/* Sidebar Nav */}
       <aside
         className="fixed top-0 right-0 h-screen z-50 bg-white border-l border-gray-200 shadow-lg"
         style={{
@@ -87,6 +89,7 @@ export default function Navbar({
                 </button>
               </div>
             </div>
+
             <nav className="px-2 py-3 space-y-1 overflow-y-auto flex-1">
               {items.map((item) => (
                 <Link
