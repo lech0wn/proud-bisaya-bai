@@ -36,15 +36,6 @@ export default function Navbar({
       <div className="fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200">
         <div className="px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Link href="/home" title="Go to Home">
-              <img
-                src="/images/pbb_hd_logo.webp"
-                alt="Proud Bisaya Bai"
-                width={50}
-                height={50}
-                className="cursor-pointer"
-              />
-            </Link>
           </div>
           {/* Burger Menu Button */}
           <button
