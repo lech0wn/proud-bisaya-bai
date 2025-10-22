@@ -1,7 +1,7 @@
-// app/[category]/[subcategory]/[slug]/page.tsx
+// app/articles/[category]/[subcategory]/[slug]/page.tsx
 import { createClient } from "@/utils/supabase/server";
-import { notFound, redirect } from "next/navigation";
-import ArticleRenderer from "../../../../components/ArticleRenderer";
+import { notFound } from "next/navigation";
+import ArticleRenderer from "@/app/components/ArticleRenderer";
 
 interface ArticlePageProps {
   params: Promise<{
@@ -12,20 +12,40 @@ interface ArticlePageProps {
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
-  // await nlng
-  const { category, subcategory, slug } = await params;
-
+  const rawParams = await params;
+  
+  // Decode URL parameters properly
+  const category = decodeURIComponent(rawParams.category);
+  const subcategory = decodeURIComponent(rawParams.subcategory);
+  const slug = decodeURIComponent(rawParams.slug);
+  
+  console.log("Decoded params:", { category, subcategory, slug });
+  
   const supabase = await createClient();
-
+  
+  // Try to find the article with decoded params
   const { data: article, error } = await supabase
     .from("articles")
     .select("*")
     .eq("slug", slug)
     .eq("category_slug", category)
     .eq("subcategory_slug", subcategory)
+    .eq("isPublished", true)
+    .eq("isArchived", false)
     .single();
 
   if (error || !article) {
+    console.error("Article not found:", { category, subcategory, slug, error });
+    
+    // Debug: Try to find what's actually in the database
+    const { data: debugData } = await supabase
+      .from("articles")
+      .select("category_slug, subcategory_slug, slug")
+      .eq("slug", slug)
+      .eq("category_slug", category);
+    
+    console.log("Debug - Articles with matching category and slug:", debugData);
+    
     return notFound();
   }
 
@@ -38,11 +58,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: ArticlePageProps) {
-  // await nlng
-  const { category, subcategory, slug } = await params;
-
+  const rawParams = await params;
+  
+  const category = decodeURIComponent(rawParams.category);
+  const subcategory = decodeURIComponent(rawParams.subcategory);
+  const slug = decodeURIComponent(rawParams.slug);
+  
   const supabase = await createClient();
-
+  
   const { data: article } = await supabase
     .from("articles")
     .select(

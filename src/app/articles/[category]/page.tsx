@@ -17,13 +17,13 @@ const titleize = (slug: string) =>
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
     .join(" ");
 
-export default async function CategoryIndex({ params, searchParams }: Props) {
+export default async function CategoryIndex({ params }: Props) {
   const { category } = await params;
-  const activeSubcat = searchParams.subcategory || null;
+  // Remove: const activeSubcat = searchParams.subcategory || null;
 
   const supabase = await createClient();
 
-  // Distinct subcategories for this category
+  // Get subcategories
   const { data: subcatsRaw, error: subcatErr } = await supabase
     .from("articles")
     .select("subcategory, subcategory_slug")
@@ -41,28 +41,21 @@ export default async function CategoryIndex({ params, searchParams }: Props) {
     a.label.localeCompare(b.label)
   );
 
-  // Articles query (filtered by subcategory if present)
-  let query = supabase
+  // Get ALL articles in this category
+  const { data: articlesData, error } = await supabase
     .from("articles")
     .select(
       "title, slug, thumbnail_url, created_at, category_slug, subcategory_slug"
     )
     .eq("isPublished", true)
     .eq("isArchived", false)
-    .eq("category_slug", category);
-
-  if (activeSubcat) {
-    query = query.eq("subcategory_slug", activeSubcat);
-  }
-
-  const { data: articlesData, error } = await query.order("created_at", {
-    ascending: false,
-  });
+    .eq("category_slug", category)
+    .order("created_at", { ascending: false });
 
   const categoryTitle = titleize(category);
   const makeSubcatHref = (slug?: string) =>
     slug
-      ? `/articles/${category}?subcategory=${encodeURIComponent(slug)}`
+      ? `/articles/${category}/${slug}` // Nested route
       : `/articles/${category}`;
 
   return (
@@ -70,54 +63,33 @@ export default async function CategoryIndex({ params, searchParams }: Props) {
       <Header />
       <main className="bg-gray-100 py-12 min-h-screen">
         <div className="max-w-6xl mx-auto px-4">
-          {/* Title with optional subcategory breadcrumb */}
           <div className="mb-4">
-            <h1 className="text-3xl font-bold text-black">
-              {categoryTitle}
-              {activeSubcat && (
-                <span className="text-gray-500">
-                  {" "}
-                  &gt; {titleize(activeSubcat)}
-                </span>
-              )}
-            </h1>
+            <h1 className="text-3xl font-bold text-black">{categoryTitle}</h1>
           </div>
 
-          {/* Subcategory section */}
+          {/* Subcategory navigation */}
           {!subcatErr && subcategories.length > 0 && (
             <div className="mb-8">
               <div className="text-xs uppercase tracking-wide text-gray-500 mb-2">
                 Subcategories
               </div>
               <div className="flex flex-wrap gap-2">
-                {/* All chip */}
                 <Link
                   href={makeSubcatHref(undefined)}
-                  className={`px-3 py-1 rounded-full border text-sm shadow ${
-                    !activeSubcat
-                      ? "bg-black text-white border-black"
-                      : "bg-white text-black border-gray-200 hover:bg-gray-50"
-                  }`}
+                  className="px-3 py-1 rounded-full border text-sm shadow bg-black text-white border-black"
                 >
                   All
                 </Link>
 
-                {subcategories.map((s) => {
-                  const isActive = activeSubcat === s.slug;
-                  return (
-                    <Link
-                      key={s.slug}
-                      href={makeSubcatHref(s.slug)}
-                      className={`px-3 py-1 rounded-full border text-sm shadow ${
-                        isActive
-                          ? "bg-black text-white border-black"
-                          : "bg-white text-black border-gray-200 hover:bg-gray-50"
-                      }`}
-                    >
-                      {s.label}
-                    </Link>
-                  );
-                })}
+                {subcategories.map((s) => (
+                  <Link
+                    key={s.slug}
+                    href={makeSubcatHref(s.slug)}
+                    className="px-3 py-1 rounded-full border text-sm shadow bg-white text-black border-gray-200 hover:bg-gray-50"
+                  >
+                    {s.label}
+                  </Link>
+                ))}
               </div>
             </div>
           )}
