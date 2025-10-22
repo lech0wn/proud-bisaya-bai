@@ -1,4 +1,3 @@
-// app/articles/[category]/page.tsx
 import React from "react";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
@@ -19,7 +18,6 @@ const titleize = (slug: string) =>
 
 export default async function CategoryIndex({ params }: Props) {
   const { category } = await params;
-  // Remove: const activeSubcat = searchParams.subcategory || null;
 
   const supabase = await createClient();
 
@@ -55,7 +53,7 @@ export default async function CategoryIndex({ params }: Props) {
   const categoryTitle = titleize(category);
   const makeSubcatHref = (slug?: string) =>
     slug
-      ? `/articles/${category}/${slug}` // Nested route
+      ? `/articles/${category}/${slug}`
       : `/articles/${category}`;
 
   return (

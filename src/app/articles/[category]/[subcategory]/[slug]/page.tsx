@@ -1,4 +1,3 @@
-// app/articles/[category]/[subcategory]/[slug]/page.tsx
 import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
 import ArticleRenderer from "@/app/components/ArticleRenderer";
@@ -14,7 +13,6 @@ interface ArticlePageProps {
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const rawParams = await params;
   
-  // Decode URL parameters properly
   const category = decodeURIComponent(rawParams.category);
   const subcategory = decodeURIComponent(rawParams.subcategory);
   const slug = decodeURIComponent(rawParams.slug);
@@ -23,7 +21,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   
   const supabase = await createClient();
   
-  // Try to find the article with decoded params
   const { data: article, error } = await supabase
     .from("articles")
     .select("*")
@@ -37,7 +34,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   if (error || !article) {
     console.error("Article not found:", { category, subcategory, slug, error });
     
-    // Debug: Try to find what's actually in the database
     const { data: debugData } = await supabase
       .from("articles")
       .select("category_slug, subcategory_slug, slug")
