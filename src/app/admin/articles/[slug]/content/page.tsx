@@ -260,7 +260,7 @@ const components: Config["components"] = {
     return (
         <div className="h-screen flex flex-col bg-gray-50 overflow-y-hidden">
             <AdminHeader/>
-        {/* <div className="bg-white border-b shadow-sm px-6 py-4">
+        <div className="bg-white border-b shadow-sm px-6 py-4">
             <button
             onClick={() => router.push(`/admin/articles/${slug}/metadata`)}
             className="text-blue-600 hover:underline text-sm mb-2 inline-block"
@@ -292,8 +292,8 @@ const components: Config["components"] = {
             onChange={handleImageUpload}
             className="hidden"
             />
-        </div> */}
-        <br />
+        </div>
+        
         <PuckEditor
             config={config}
             data={data}

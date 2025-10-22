@@ -556,7 +556,7 @@ export default function AdminDashboardPage() {
                           )}
                           
                           <Link
-                            href={`/articles/${a.slug}`}
+                            href={`/admin/articles/${a.slug}`}
                             target="_blank"
                             className="bg-blue-500 text-white font-bold px-12 py-2 rounded-lg text-center hover:bg-blue-600 w-full"
                           >
