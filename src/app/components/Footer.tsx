@@ -80,7 +80,10 @@ const Footer: React.FC = () => {
             <h3 className="text-2xl font-bold">Blogs</h3>
             <ul className="mt-3 space-y-2 text-gray-300">
               <li>
-                <Link href="#" className="hover:text-white">
+                <Link
+                  href="/articles/destinations"
+                  className="hover:text-white"
+                >
                   Destinations
                 </Link>
               </li>
@@ -112,7 +115,7 @@ const Footer: React.FC = () => {
             <h3 className="text-2xl font-bold">About</h3>
             <ul className="mt-3 space-y-2 text-gray-300">
               <li>
-                <Link href="/contact-us" className="hover:text-white">
+                <Link href="/about-us" className="hover:text-white">
                   About Us
                 </Link>
               </li>

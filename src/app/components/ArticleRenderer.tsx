@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 type Article = {
   id: string;
@@ -21,11 +21,12 @@ interface ArticleRendererProps {
 export default function ArticleRenderer({ article }: ArticleRendererProps) {
   let puckData;
   try {
-    puckData = typeof article.content === 'string' 
-      ? JSON.parse(article.content) 
-      : article.content;
+    puckData =
+      typeof article.content === "string"
+        ? JSON.parse(article.content)
+        : article.content;
   } catch (e) {
-    console.error('Failed to parse article content:', e);
+    console.error("Failed to parse article content:", e);
     puckData = { content: [] };
   }
 
@@ -33,19 +34,25 @@ export default function ArticleRenderer({ article }: ArticleRendererProps) {
     const { type, props } = component;
 
     switch (type) {
-      case 'Heading': {
-        const HeadingTag = `h${props.level || 2}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+      case "Heading": {
+        const HeadingTag = `h${props.level || 2}` as
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6";
         const headingStyles: Record<number, string> = {
-          1: 'text-4xl font-bold mb-6 text-gray-900',
-          2: 'text-3xl font-bold mb-5 text-gray-900',
-          3: 'text-2xl font-bold mb-4 text-gray-900',
-          4: 'text-xl font-bold mb-3 text-gray-900',
-          5: 'text-lg font-bold mb-3 text-gray-900',
-          6: 'text-base font-bold mb-2 text-gray-900',
+          1: "text-4xl font-bold mb-6 text-gray-900",
+          2: "text-3xl font-bold mb-5 text-gray-900",
+          3: "text-2xl font-bold mb-4 text-gray-900",
+          4: "text-xl font-bold mb-3 text-gray-900",
+          5: "text-lg font-bold mb-3 text-gray-900",
+          6: "text-base font-bold mb-2 text-gray-900",
         };
         return (
-          <HeadingTag 
-            key={index} 
+          <HeadingTag
+            key={index}
             className={headingStyles[props.level] || headingStyles[2]}
           >
             {props.text}
@@ -53,20 +60,20 @@ export default function ArticleRenderer({ article }: ArticleRendererProps) {
         );
       }
 
-      case 'Paragraph':
+      case "Paragraph":
         return (
           <p key={index} className="text-lg leading-relaxed mb-6 text-gray-700">
             {props.text}
           </p>
         );
 
-      case 'ImageBlock':
+      case "ImageBlock":
         return (
           <figure key={index} className="mb-8">
             {props.src && (
               <img
                 src={props.src}
-                alt={props.alt || ''}
+                alt={props.alt || ""}
                 className="w-full rounded-xl object-cover shadow-lg"
               />
             )}
@@ -84,7 +91,13 @@ export default function ArticleRenderer({ article }: ArticleRendererProps) {
   };
 
   return (
-    <article className="max-w-4xl mx-auto px-6 py-12 bg-white">
+    <article className="max-w-4xl mx-auto px-6 py-2 bg-white">
+      <a
+        href="/articles"
+        className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+      >
+        &larr; Back to Articles
+      </a>
       <header className="mb-12">
         {article.thumbnail_url && (
           <img
@@ -113,10 +126,10 @@ export default function ArticleRenderer({ article }: ArticleRendererProps) {
           <span className="font-medium">By {article.author}</span>
           <span>&bull;</span>
           <time dateTime={article.created_at}>
-            {new Date(article.created_at).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
+            {new Date(article.created_at).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
             })}
           </time>
         </div>
@@ -124,7 +137,7 @@ export default function ArticleRenderer({ article }: ArticleRendererProps) {
 
       <div className="prose prose-lg max-w-none">
         {puckData.content && puckData.content.length > 0 ? (
-          puckData.content.map((component: any, index: number) => 
+          puckData.content.map((component: any, index: number) =>
             renderComponent(component, index)
           )
         ) : (
@@ -134,12 +147,12 @@ export default function ArticleRenderer({ article }: ArticleRendererProps) {
 
       <footer className="mt-16 pt-8 border-t border-gray-200">
         <div className="flex justify-between items-center">
-          <a
+          {/* <a
             href="/articles"
             className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
           >
             &larr; Back to Articles
-          </a>
+          </a> */}
         </div>
       </footer>
     </article>

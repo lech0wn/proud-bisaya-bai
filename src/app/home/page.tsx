@@ -100,7 +100,7 @@ const Home: React.FC = async () => {
           }
           {/* Content */}
           <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4">
-            <h1 className="text-9xl md:text-10xl font-bold bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] bg-clip-text text-transparent leading-tight">
+            <h1 className="text-9xl md:text-10xl font-bold bg-gradient-to-r from-[var(--custom-orange)] to-[var(--custom-orange)] bg-clip-text text-transparent leading-tight">
               Proud Bisaya Bai
             </h1>
             <p className="mt-4 text-lg md:text-xl max-w-2xl">
@@ -149,7 +149,7 @@ const Home: React.FC = async () => {
               All Articles
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-black">
-              {(articlesData || []).map((article) => {
+              {(articlesData || []).slice(0, 4).map((article) => {
                 const href = `/articles/${article.category_slug}/${article.subcategory_slug}/${article.slug}`;
                 return (
                   <Link
@@ -158,7 +158,7 @@ const Home: React.FC = async () => {
                     className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                   >
                     <img
-                      src={article.thumbnail_url || "/images/articles.webp"}
+                      src={article.thumbnail_url || "/images/banner.webp"}
                       alt={article.title}
                       className="w-full h-40 object-cover"
                       loading="lazy"
@@ -175,6 +175,12 @@ const Home: React.FC = async () => {
                 );
               })}
             </div>
+            <Link
+              href="/articles"
+              className="flex items-center justify-center py-8 underline text-lg text-gray-600 hover:text-gray-400"
+            >
+              See all articles
+            </Link>
           </div>
         </div>
 
@@ -242,15 +248,30 @@ const Home: React.FC = async () => {
             <h3 className="text-lg font-bold mb-4 text-black">Our Partners</h3>
             <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
               {/* Partner Logos */}
-              {[1, 2, 3, 4].map((_, index) => (
-                <div
-                  key={index}
-                  className="w-20 h-20 bg-gray-300 rounded-lg flex items-center justify-center"
-                >
-                  {/* Placeholder for Partner Logo */}
-                  <span className="text-gray-500">Logo</span>
-                </div>
-              ))}
+              <div className="flex flex-col items-center">
+                <img
+                  src="/images/cebuhomepages.webp"
+                  alt="Cebu Home Pages Logo"
+                  className="w-20 h-20 object-contain"
+                />
+                <p className="text-sm text-gray-700 mt-2">Cebu Home Pages</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <img
+                  src="/images/lalamove.webp"
+                  alt="Lalamove Logo"
+                  className="w-20 h-20 rounded-full object-cover"
+                />
+                <p className="text-sm text-gray-700 mt-2">Lalamove</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <img
+                  src="/images/jse.webp"
+                  alt="JSE Logo"
+                  className="w-20 h-20 rounded-full object-cover"
+                />
+                <p className="text-sm text-gray-700 mt-2">JSE</p>
+              </div>
             </div>
           </div>
         </section>
