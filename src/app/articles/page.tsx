@@ -12,6 +12,7 @@ export default async function ArticlesIndexPage() {
       "id, title, author, created_at, category, subcategory, slug, thumbnail_url, category_slug, subcategory_slug"
     )
     .eq("isPublished", true)
+    .eq("isArchived", false)
     .order("created_at", { ascending: false });
 
   return (
