@@ -6,7 +6,7 @@ import { useRouter, useParams } from "next/navigation";
 import { PuckEditor } from "@/app/components/PuckEditor";
 import { LoadingOverlay } from "@/app/components/LoadingOverlay";
 import AdminHeader from "@/app/components/AdminHeader";
-import { config } from "@/app/components/puck.config";
+import { config } from "@/app/components/Puck.config";
 
 
 export default function ArticleContentPage() {
