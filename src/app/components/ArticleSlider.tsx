@@ -3,6 +3,8 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
+import Header from "@/app/components/Header";
+import Footer from "@/app/components/Footer";
 
 interface Article {
   id: number;
@@ -24,6 +26,7 @@ interface ArticleSliderProps {
 export default function ArticleSlider({ articles }: ArticleSliderProps) {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [displayCount, setDisplayCount] = useState(8);
 
   // Define visible category tabs
   const categories = [
@@ -56,10 +59,31 @@ export default function ArticleSlider({ articles }: ArticleSliderProps) {
     return filtered;
   }, [articles, activeCategory, searchQuery]);
 
+  // Reset display count when filters change
+  const handleCategoryChange = (categoryId: string) => {
+    setActiveCategory(categoryId);
+    setDisplayCount(8);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setDisplayCount(8);
+  };
+
+  const displayedArticles = filteredArticles.slice(0, displayCount);
+  const hasMore = displayCount < filteredArticles.length;
+
+  const loadMore = () => {
+    setDisplayCount((prev) => prev + 8);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white sticky top-0 z-30 border-b border-gray-200 shadow-sm">
+      <Header />
+
+      {/* Search and Category Bar - positioned below header */}
+      <div className="bg-white sticky top-0 z-30 border-b border-gray-200 shadow-sm mt-14">
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           {/* Logo + Search */}
           <div className="flex items-center gap-4 w-full lg:w-1/2">
@@ -70,7 +94,7 @@ export default function ArticleSlider({ articles }: ArticleSliderProps) {
                 type="text"
                 placeholder="Search article"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
                 className="w-full pl-10 pr-4 py-2 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900"
               />
             </div>
@@ -81,7 +105,7 @@ export default function ArticleSlider({ articles }: ArticleSliderProps) {
             {categories.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
+                onClick={() => handleCategoryChange(cat.id)}
                 className={`whitespace-nowrap px-3 py-2 rounded-full transition-colors ${
                   activeCategory === cat.id
                     ? "bg-gray-900 text-white"
@@ -93,115 +117,141 @@ export default function ArticleSlider({ articles }: ArticleSliderProps) {
             ))}
           </div>
         </div>
-      </header>
+      </div>
 
-      {/* Main layout grid */}
-      <main className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-4 gap-10">
-        {/* Articles Section */}
-        <section className="lg:col-span-3 space-y-6">
-          {filteredArticles.length === 0 ? (
-            <div className="text-gray-600 text-center py-12">
-              No articles found in this category.
-            </div>
-          ) : (
-            filteredArticles.map((article) => {
-              const href = `/articles/${article.category_slug}/${article.subcategory_slug}/${article.slug}`;
+      {/* Main Content - flex-1 ensures it takes remaining space */}
+      <main className="flex-1 max-w-7xl mx-auto px-6 py-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
+          {/* Articles Section */}
+          <section className="lg:col-span-3 space-y-6">
+            {filteredArticles.length === 0 ? (
+              <div className="text-gray-600 text-center py-12">
+                No articles found in this category.
+              </div>
+            ) : (
+              <>
+                {displayedArticles.map((article) => {
+                  const href = `/articles/${article.category_slug}/${article.subcategory_slug}/${article.slug}`;
 
-              return (
-                <Link
-                  key={article.id}
-                  href={href}
-                  className="block bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
-                >
-                  <div className="flex flex-col sm:flex-row">
-                    {article.thumbnail_url && (
-                      <div className="sm:w-48 h-40 sm:h-auto overflow-hidden">
-                        <img
-                          src={article.thumbnail_url}
-                          alt={article.title}
-                          className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
-                        />
+                  return (
+                    <Link
+                      key={article.id}
+                      href={href}
+                      className="block bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
+                    >
+                      <div className="flex flex-col sm:flex-row">
+                        {article.thumbnail_url && (
+                          <div className="sm:w-48 h-40 sm:h-auto overflow-hidden">
+                            <img
+                              src={article.thumbnail_url}
+                              alt={article.title}
+                              className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                        )}
+                        <div className="flex-1 p-6">
+                          <p className="text-xs uppercase text-gray-500 mb-2">
+                            {article.category}
+                          </p>
+                          <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 line-clamp-2">
+                            {article.title}
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            By {article.author} •{" "}
+                            {new Date(article.created_at).toLocaleDateString()}
+                          </p>
+                        </div>
                       </div>
-                    )}
-                    <div className="flex-1 p-6">
-                      <p className="text-xs uppercase text-gray-500 mb-2">
-                        {article.category}
-                      </p>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 line-clamp-2">
-                        {article.title}
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        By {article.author} •{" "}
-                        {new Date(article.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
+                    </Link>
+                  );
+                })}
+
+                {/* Load More Button */}
+                {hasMore && (
+                  <div className="flex justify-center pt-8">
+                    <button
+                      onClick={loadMore}
+                      className="px-8 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors shadow-md hover:shadow-lg"
+                    >
+                      Load More Articles
+                    </button>
                   </div>
-                </Link>
-              );
-            })
-          )}
-        </section>
+                )}
 
-        {/* Sidebar Section */}
-        <aside className="hidden lg:block space-y-8">
-          {/* Recommended Topics */}
-          {/* <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Recommend Topics For You
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {[
-                "Technology",
-                "Design",
-                "Business",
-                "Crypto",
-                "Productivity",
-                "Mindfulness",
-                "Psychology",
-                "NFT",
-              ].map((topic) => (
-                <span
-                  key={topic}
-                  className="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full cursor-pointer hover:bg-gray-200"
-                >
-                  {topic}
-                </span>
-              ))}
+                {/* Showing count */}
+                <div className="text-center text-sm text-gray-600 pt-4 pb-6">
+                  Showing {displayedArticles.length} of {filteredArticles.length} articles
+                </div>
+              </>
+            )}
+          </section>
+
+          {/* Sidebar Section */}
+          <aside className="hidden lg:block space-y-8">
+            {/* Ad Placeholder */}
+            <div className="sticky top-24 space-y-6">
+              {/* Reading List */}
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                  Reading List
+                </h2>
+                <ul className="space-y-4">
+                  {filteredArticles.slice(0, 3).map((a) => (
+                    <li key={a.id}>
+                      <Link
+                        href={`/articles/${a.category_slug}/${a.subcategory_slug}/${a.slug}`}
+                        className="flex gap-3 items-center hover:text-blue-600 transition-colors"
+                      >
+                        {a.thumbnail_url && (
+                          <img
+                            src={a.thumbnail_url}
+                            alt={a.title}
+                            className="w-12 h-12 object-cover rounded"
+                          />
+                        )}
+                        <div>
+                          <p className="text-sm font-medium text-gray-800 line-clamp-2">
+                            {a.title}
+                          </p>
+                          <p className="text-xs text-gray-500">{a.category}</p>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Additional Ad Placeholders */}
+              <div className="bg-gray-100 rounded-lg overflow-hidden shadow-sm">
+                <img
+                  src="images/ads_placeholder.webp"
+                  alt="Advertisement 1"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+
+              <div className="bg-gray-100 rounded-lg overflow-hidden shadow-sm">
+                <img
+                  src="images/ads_placeholder.webp"
+                  alt="Advertisement 2"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+
+              <div className="bg-gray-100 rounded-lg overflow-hidden shadow-sm">
+                <img
+                  src="images/ads_placeholder.webp"
+                  alt="Advertisement 3  "
+                  className="w-full h-auto object-cover"
+                />
+              </div>
             </div>
-          </div> */}
-
-          {/* Reading List */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Reading List
-            </h2>
-            <ul className="space-y-4">
-              {filteredArticles.slice(0, 3).map((a) => (
-                <li key={a.id}>
-                  <Link
-                    href={`/articles/${a.category_slug}/${a.subcategory_slug}/${a.slug}`}
-                    className="flex gap-3 items-center hover:text-blue-600"
-                  >
-                    {a.thumbnail_url && (
-                      <img
-                        src={a.thumbnail_url}
-                        alt={a.title}
-                        className="w-12 h-12 object-cover rounded"
-                      />
-                    )}
-                    <div>
-                      <p className="text-sm font-medium text-gray-800 line-clamp-2">
-                        {a.title}
-                      </p>
-                      <p className="text-xs text-gray-500">{a.category}</p>
-                    </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </aside>
+          </aside>
+        </div>
       </main>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
