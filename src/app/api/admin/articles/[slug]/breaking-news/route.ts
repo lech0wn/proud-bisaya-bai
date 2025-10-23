@@ -24,7 +24,6 @@ export async function PATCH(
             return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
         }
 
-        // Parse request body
         const body = await request.json();
         const { isBreakingNews } = body;
 
@@ -32,7 +31,6 @@ export async function PATCH(
             return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
         }
 
-        // Get the article
         const { data: article, error: articleError } = await supabase
             .from('articles')
             .select('*')
@@ -44,7 +42,6 @@ export async function PATCH(
             return NextResponse.json({ error: 'Article not found' }, { status: 404 });
         }
 
-        // Check if article is published
         if (!article.isPublished) {
             return NextResponse.json({
                 error: 'Only published articles can be set as breaking news'
@@ -52,13 +49,14 @@ export async function PATCH(
         }
 
         if (isBreakingNews) {
-            // When setting as breaking news, remove breaking news from all other articles
+            // when setting as breaking news, remove breaking news from all other articles first kay 1 ra ang max
             const { error: updateError } = await supabase
                 .from('articles')
                 .update({
                     isBreakingNews: false,
                     updated_at: new Date().toISOString()
                 })
+                .neq('slug', params.slug)
                 .eq('isBreakingNews', true);
 
             if (updateError) {

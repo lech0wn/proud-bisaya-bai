@@ -12,6 +12,7 @@ type Article = {
     category?: string;
     subcategory?: string;
     created_at?: string;
+    updated_at?: string;
     thumbnail_url?: string;
     status?: string;
     isPublished?: boolean;
@@ -181,8 +182,19 @@ export default function AdminDashboardPage() {
 
             if (!res.ok) throw new Error("Failed to update editor's pick status");
 
-            // Optional: refresh to ensure sync with server
-            // fetchArticles();
+            // Get response data and update state with server response
+            const data = await res.json();
+            
+            // refresh articles and sync state
+            if (newStatus) {
+                await fetchArticles();
+            } else {
+                // just update this article with the server response
+                updateArticleInState(slug, { 
+                    isEditorsPick: Boolean(data.isEditorsPick),
+                    updated_at: data.updated_at 
+                });
+            }
         } catch (err: any) {
             alert(err.message);
             // Revert on error
@@ -207,8 +219,18 @@ export default function AdminDashboardPage() {
 
             if (!res.ok) throw new Error("Failed to update breaking news status");
 
-            // Optional: refresh to ensure sync with server
-            // fetchArticles();
+            const data = await res.json();
+            
+            // refresh articles and sync state
+            if (newStatus) {
+                await fetchArticles();
+            } else {
+                // just update this article with the server response
+                updateArticleInState(slug, { 
+                    isBreakingNews: Boolean(data.isBreakingNews),
+                    updated_at: data.updated_at 
+                });
+            }
         } catch (err: any) {
             alert(err.message);
             // Revert on error

@@ -24,10 +24,14 @@ export async function PATCH(
             return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
         }
 
+        // archive the article and also clear breaking news/editors pick attribute
         const { data, error } = await supabase
             .from('articles')
             .update({
                 isArchived: true,
+                isPublished: false,
+                isBreakingNews: false,
+                isEditorsPick: false,
                 updated_at: new Date().toISOString()
             })
             .eq('slug', params.slug)

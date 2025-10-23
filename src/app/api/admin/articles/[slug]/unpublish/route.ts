@@ -6,7 +6,7 @@ export async function PATCH(
     { params }: { params: { slug: string } }
 ) {
     try {
-        const supabase = createClient();
+        const supabase = await createClient();
 
         const { data: { user }, error: authError } = await supabase.auth.getUser();
         if (authError || !user) {
@@ -35,7 +35,7 @@ export async function PATCH(
 
         if (article.isBreakingNews || article.isEditorsPick) {
             return NextResponse.json(
-                { error: 'Cannot unpublish an article that is set as breaking news or editor\'s pick' },
+                { error: 'Cannot unpublish an article that is set as breaking news or editor\'s pick. Please remove those flags first.' },
                 { status: 400 }
             );
         }
@@ -44,6 +44,7 @@ export async function PATCH(
             .from('articles')
             .update({
                 isPublished: false,
+                status: 'Pending',
                 updated_at: new Date().toISOString()
             })
             .eq('slug', params.slug)
