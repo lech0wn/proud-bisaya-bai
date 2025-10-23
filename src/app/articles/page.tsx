@@ -10,6 +10,7 @@ export default async function ArticlesIndexPage() {
       "id, title, author, created_at, category, subcategory, slug, thumbnail_url, category_slug, subcategory_slug"
     )
     .eq("isPublished", true)
+    .eq("isArchived", false)
     .order("created_at", { ascending: false });
 
   // Categories with subcategories and article counts
@@ -71,6 +72,7 @@ export default async function ArticlesIndexPage() {
     },
   ];
 
+<<<<<<< HEAD
   // Calculate subcategory counts
   categories.forEach(category => {
     category.subcategories?.forEach(subcategory => {
@@ -79,6 +81,11 @@ export default async function ArticlesIndexPage() {
       ).length || 0;
     });
   });
+=======
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {articles?.map((article) => {
+            const href = `/articles/${article.category_slug}/${article.subcategory_slug}/${article.slug}`;
+>>>>>>> ab998a347dc6fac9e850485d63981e40acdfb1a8
 
   return <ArticlesPageContent articles={articles || []} categories={categories} />;
 }

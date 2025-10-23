@@ -1,4 +1,3 @@
-// app/articles/[category]/[subcategory]/page.tsx
 import React from "react";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
