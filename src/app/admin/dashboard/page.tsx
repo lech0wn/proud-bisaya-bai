@@ -460,7 +460,7 @@ export default function AdminDashboardPage() {
               )}
             </div>
           ) : (
-            <div className="max-h-[calc(100vh-400px)] overflow-y-auto">
+            <div className="max-h-[calc(100vh-320px)] overflow-y-auto">
               <table className="min-w-full table-fixed">
                 <thead className="bg-gray-50 sticky top-0 z-10">
                   <tr>
