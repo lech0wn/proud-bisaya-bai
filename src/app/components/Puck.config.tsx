@@ -24,7 +24,7 @@ export const config: Config<props> = {
                 return <Tag className="font-bold mb-4 p-4">{text}</Tag>;
             },
         },
-        
+
         Paragraph: {
             label: "Paragraph",
             fields: {
@@ -33,7 +33,7 @@ export const config: Config<props> = {
             defaultProps: { text: "Paragraph text here." },
             render: ({ text }) => <p className="mb-4 leading-relaxed p-4">{text}</p>,
         },
-        
+
         ImageBlock: {
             label: "Image",
             fields: {
@@ -62,7 +62,7 @@ export const config: Config<props> = {
                 );
             },
         },
-        
+
         ColumnBlock: {
             label: "Column Block",
             fields: {
@@ -92,7 +92,7 @@ export const config: Config<props> = {
                 </div>
             ),
         },
-        
+
         RichTextBlock: {
             label: "Rich Text",
             fields: {
@@ -108,7 +108,7 @@ export const config: Config<props> = {
             render: ({ text, puck }) => {
                 return (
                     <div className="mb-4 p-4">
-                        <div 
+                        <div
                             dangerouslySetInnerHTML={{ __html: text }}
                             suppressContentEditableWarning
                             contentEditable={puck.isEditing}
@@ -124,5 +124,7 @@ export const config: Config<props> = {
                 );
             },
         },
+
+        PuckRichText,
     },
 };
