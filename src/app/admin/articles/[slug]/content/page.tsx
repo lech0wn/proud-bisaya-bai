@@ -1,74 +1,15 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import type { Data } from "@measured/puck";
+import React, { useState, useEffect, useRef, Children } from "react";
+import type { Data, Slot } from "@measured/puck";
 import { useRouter, useParams } from "next/navigation";
 import { PuckEditor } from "@/app/components/PuckEditor";
 import { LoadingOverlay } from "@/app/components/LoadingOverlay";
 import AdminHeader from "@/app/components/AdminHeader";
+import { config } from "@/app/components/Puck.config";
 
-type HeadingProps = { text: string; level: number };
-type ParagraphProps = { text: string };
-type ImageBlockProps = { src: string; alt: string; caption?: string };
 
-import type { Config } from "@measured/puck";
-
-const components: Config["components"] = {
-    Heading: {
-        label: "Heading",
-        fields: {
-        text: { type: "text", label: "Text" },
-        level: { type: "number", label: "Level", min: 1, max: 6 },
-        },
-        defaultProps: { text: "Heading Text", level: 2 },
-        render: (props) => {
-        const { text, level } = props as unknown as HeadingProps;
-        const Tag = `h${level}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-        return <Tag className="font-bold mb-4">{text}</Tag>;
-        },
-    },
-    Paragraph: {
-        label: "Paragraph",
-        fields: { text: { type: "textarea", label: "Text" } },
-        defaultProps: { text: "Paragraph text here." },
-        render: (props) => {
-        const { text } = props as unknown as ParagraphProps;
-        return <p className="mb-4 leading-relaxed">{text}</p>;
-        },
-    },
-    ImageBlock: {
-        label: "Image",
-        fields: {
-        src: { type: "text", label: "Image URL" },
-        alt: { type: "text", label: "Alt text" },
-        caption: { type: "text", label: "Caption (optional)" },
-        },
-        defaultProps: { src: "", alt: "", caption: "" },
-        render: (props) => {
-        const { src, alt, caption } = props as unknown as ImageBlockProps;
-        if (!src)
-            return (
-            <div className="mb-4 p-4 bg-gray-100 rounded text-gray-500 text-center">
-                Click to add image URL or upload below
-            </div>
-            );
-        return (
-            <figure className="mb-4">
-            <img src={src} alt={alt} className="w-full rounded-lg object-cover" />
-            {caption && (
-                <figcaption className="text-sm text-gray-600 mt-2 text-center italic">
-                {caption}
-                </figcaption>
-            )}
-            </figure>
-        );
-        },
-    },
-    };
-
-    const config: Config = { components };
-
-    export default function ArticleContentPage() {
+export default function ArticleContentPage() {
     const router = useRouter();
     const params = useParams();
     const slug = params.slug as string;
@@ -258,54 +199,21 @@ const components: Config["components"] = {
     }
 
     return (
-        <div className="h-screen flex flex-col bg-gray-50 overflow-y-hidden">
+        <div>
             <AdminHeader/>
-        {/* <div className="bg-white border-b shadow-sm px-6 py-4">
-            <button
-            onClick={() => router.push(`/admin/articles/${slug}/metadata`)}
-            className="text-blue-600 hover:underline text-sm mb-2 inline-block"
-            >
-            ← Back to Metadata
-            </button>
-            <h1 className="text-2xl text-black font-bold">
-            {isEdit ? "Edit" : "Create"} Content: {metadata.title}
-            </h1>
-            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-800">
-                <strong>💡 How to add images:</strong> Click "Upload Image" button
-                below, select your image, and the URL will be copied to your
-                clipboard. Then paste it into the Image Block's "Image URL" field
-                in the editor.
-            </p>
-            </div>
-            <button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
-            className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-            {uploading ? "Uploading..." : "📤 Upload Image"}
-            </button>
-            <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="hidden"
+            <br />
+            <PuckEditor
+                config={config}
+                data={data}
+                onPublish={handleSave}
+                onChange={setData}
             />
-        </div> */}
-        <br />
-        <PuckEditor
-            config={config}
-            data={data}
-            onPublish={handleSave}
-            onChange={setData}
-        />
 
-        <LoadingOverlay
-            saving={saving}
-            uploading={uploading}
-            uploadingThumbnail={false}
-        />
+            <LoadingOverlay
+                saving={saving}
+                uploading={uploading}
+                uploadingThumbnail={false}
+            />
         </div>
     );
 }
