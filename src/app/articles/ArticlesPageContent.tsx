@@ -75,7 +75,7 @@ export default function ArticlesPageContent({ articles, categories }: any) {
       <Header />
 
       {/* Sidebar Toggle Button - Hidden when sidebar is open */}
-      {!isOpen && (
+      {/* {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
           className="fixed top-20 left-5 z-50 bg-white p-3 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl"
@@ -89,24 +89,24 @@ export default function ArticlesPageContent({ articles, categories }: any) {
             className="w-6 h-6"
           />
         </button>
-      )}
+      )} */}
 
       {/* Overlay - click to close sidebar */}
-      {isOpen && (
+      {/* {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-20 z-30"
           onClick={() => setIsOpen(false)}
         />
-      )}
+      )} */}
 
       {/* Sidebar */}
-      <CategorySidebar
+      {/* <CategorySidebar
         isOpen={isOpen}
         categories={categories}
         onCategorySelect={handleCategorySelect}
         activeCategory={activeCategory}
         activeSubcategory={activeSubcategory}
-      />
+      /> */}
 
       {/* Main Content */}
       <div className="pt-14">
