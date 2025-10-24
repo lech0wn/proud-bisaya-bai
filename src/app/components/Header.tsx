@@ -52,8 +52,7 @@ export default function Navbar({
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200">
         <div className="px-4 py-2 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-          </div>
+          <div className="flex items-center gap-2"></div>
 
           {/* Burger Menu */}
           <button
@@ -148,7 +147,7 @@ export default function Navbar({
                   {/* Get Featured button */}
                   <div className="px-3 mt-4">
                     <Link
-                      href="/contact"
+                      href="/contact-us"
                       title="Get Featured"
                       className="w-full inline-flex items-center justify-center rounded-md bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] text-white text-sm font-semibold px-4 py-2 transition-transform transform hover:scale-105 hover:shadow-xl active:scale-95"
                     >
