@@ -53,6 +53,15 @@ export default function Navbar({
       <div className="fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200">
         <div className="px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
+            <Link href="/home" aria-label="Go to home" title="Home">
+              <img
+                src="/images/pbb_hd_logo.webp" /* change to your actual logo path */
+                alt="Proud Bisaya Bai"
+                width={50}
+                height={50}
+                className="h-10 w-auto object-contain cursor-pointer"
+              />
+            </Link>
           </div>
 
           {/* Burger Menu */}
@@ -148,7 +157,7 @@ export default function Navbar({
                   {/* Get Featured button */}
                   <div className="px-3 mt-4">
                     <Link
-                      href="/contact"
+                      href="/contact-us"
                       title="Get Featured"
                       className="w-full inline-flex items-center justify-center rounded-md bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)] text-white text-sm font-semibold px-4 py-2 transition-transform transform hover:scale-105 hover:shadow-xl active:scale-95"
                     >
