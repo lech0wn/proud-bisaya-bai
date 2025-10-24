@@ -14,7 +14,7 @@ export async function GET(request: Request) {
 
     let query = supabase
       .from('articles')
-      .select('*', { count: 'exact' })
+      .select('*, isEditorsPick, isBreakingNews', { count: 'exact' })
       .eq('isPublished', true)
       .eq('isArchived', false)
       .order('created_at', { ascending: false })
