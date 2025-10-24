@@ -52,9 +52,7 @@ export default async function CategoryIndex({ params }: Props) {
 
   const categoryTitle = titleize(category);
   const makeSubcatHref = (slug?: string) =>
-    slug
-      ? `/articles/${category}/${slug}`
-      : `/articles/${category}`;
+    slug ? `/articles/${category}/${slug}` : `/articles/${category}`;
 
   return (
     <div>

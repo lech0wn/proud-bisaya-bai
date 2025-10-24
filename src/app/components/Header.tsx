@@ -52,7 +52,17 @@ export default function Navbar({
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200">
         <div className="px-4 py-2 flex items-center justify-between">
-          <div className="flex items-center gap-2"></div>
+          <div className="flex items-center gap-2">
+            <Link href="/home" aria-label="Go to home" title="Home">
+              <img
+                src="/images/pbb_hd_logo.webp" /* change to your actual logo path */
+                alt="Proud Bisaya Bai"
+                width={50}
+                height={50}
+                className="h-10 w-auto object-contain cursor-pointer"
+              />
+            </Link>
+          </div>
 
           {/* Burger Menu */}
           <button
