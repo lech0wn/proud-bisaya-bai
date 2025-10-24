@@ -1,5 +1,6 @@
 import { Puck } from "@measured/puck";
 import type { Config, Data } from "@measured/puck";
+import { title } from "process";
 import React from "react";
 
 interface PuckEditorProps {
@@ -23,7 +24,7 @@ export function PuckEditor({
         onPublish={onPublish}
         onChange={onChange}
         overrides={{
-          header: ({ actions, children }) => (
+          header: ({ actions, children, }) => (
             <>
               {children}
               <div></div>
