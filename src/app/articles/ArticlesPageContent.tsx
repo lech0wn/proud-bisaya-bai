@@ -10,7 +10,9 @@ import Image from "next/image";
 export default function ArticlesPageContent({ articles, categories }: any) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState("all");
-  const [activeSubcategory, setActiveSubcategory] = useState<string | undefined>(undefined);
+  const [activeSubcategory, setActiveSubcategory] = useState<
+    string | undefined
+  >(undefined);
   const [displayCount, setDisplayCount] = useState(8);
 
   // Filter articles based on selected category and subcategory
@@ -33,7 +35,10 @@ export default function ArticlesPageContent({ articles, categories }: any) {
   }, [articles, activeCategory, activeSubcategory]);
 
   // Handle category selection from sidebar
-  const handleCategorySelect = (categorySlug: string, subcategorySlug?: string) => {
+  const handleCategorySelect = (
+    categorySlug: string,
+    subcategorySlug?: string
+  ) => {
     setActiveCategory(categorySlug);
     setActiveSubcategory(subcategorySlug);
     setDisplayCount(8); // Reset display count when filter changes
@@ -42,7 +47,7 @@ export default function ArticlesPageContent({ articles, categories }: any) {
   // Get current filter title
   const getFilterTitle = () => {
     if (activeCategory === "all") return "All Articles";
-    
+
     const category = categories.find((c: any) => c.slug === activeCategory);
     if (!category) return "All Articles";
 
@@ -50,7 +55,9 @@ export default function ArticlesPageContent({ articles, categories }: any) {
       const subcategory = category.subcategories?.find(
         (s: any) => s.slug === activeSubcategory
       );
-      return subcategory ? `${category.label} - ${subcategory.label}` : category.label;
+      return subcategory
+        ? `${category.label} - ${subcategory.label}`
+        : category.label;
     }
 
     return category.label;
@@ -74,10 +81,10 @@ export default function ArticlesPageContent({ articles, categories }: any) {
           className="fixed top-20 left-5 z-50 bg-white p-3 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl"
           title="Open sidebar"
         >
-          <Image 
-            src="/filter.svg" 
-            alt="Menu" 
-            width={24} 
+          <Image
+            src="/filter.svg"
+            alt="Menu"
+            width={24}
             height={24}
             className="w-6 h-6"
           />
@@ -108,13 +115,16 @@ export default function ArticlesPageContent({ articles, categories }: any) {
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2">{getFilterTitle()}</h1>
             <p className="text-gray-600">
-              {filteredArticles.length} {filteredArticles.length === 1 ? "article" : "articles"} found
+              {filteredArticles.length}{" "}
+              {filteredArticles.length === 1 ? "article" : "articles"} found
             </p>
           </div>
 
           {filteredArticles.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-gray-500 text-lg">No articles found in this category.</p>
+              <p className="text-gray-500 text-lg">
+                No articles found in this category.
+              </p>
               <button
                 onClick={() => {
                   setActiveCategory("all");
@@ -131,10 +141,12 @@ export default function ArticlesPageContent({ articles, categories }: any) {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {displayedArticles.map((article: any, index: number) => {
                   const href = `/articles/${article.category_slug}/${article.subcategory_slug}/${article.slug}`;
-                  
+
                   // Insert ad after every 6 articles
-                  const showAdAfter = (index + 1) % 6 === 0 && index !== displayedArticles.length - 1;
-                  
+                  const showAdAfter =
+                    (index + 1) % 6 === 0 &&
+                    index !== displayedArticles.length - 1;
+
                   return (
                     <React.Fragment key={article.id}>
                       <Link href={href} className="group">
@@ -165,7 +177,9 @@ export default function ArticlesPageContent({ articles, categories }: any) {
                             </h2>
                             <p className="text-sm text-gray-600">
                               By {article.author} •{" "}
-                              {new Date(article.created_at).toLocaleDateString()}
+                              {new Date(
+                                article.created_at
+                              ).toLocaleDateString()}
                             </p>
                           </div>
                         </article>
@@ -175,11 +189,11 @@ export default function ArticlesPageContent({ articles, categories }: any) {
                       {showAdAfter && (
                         <div className="md:col-span-2 lg:col-span-3">
                           <div className="bg-gray-100 rounded-lg overflow-hidden shadow-sm max-w-3xl mx-auto">
-                            <img
+                            {/* <img
                               src="/images/ads_placeholder.webp"
                               alt="Advertisement"
                               className="w-full h-24 object-cover"
-                            />
+                            /> */}
                           </div>
                         </div>
                       )}
@@ -202,7 +216,8 @@ export default function ArticlesPageContent({ articles, categories }: any) {
 
               {/* Showing count */}
               <div className="text-center text-sm text-gray-600 pt-4 pb-6">
-                Showing {displayedArticles.length} of {filteredArticles.length} articles
+                Showing {displayedArticles.length} of {filteredArticles.length}{" "}
+                articles
               </div>
             </>
           )}
