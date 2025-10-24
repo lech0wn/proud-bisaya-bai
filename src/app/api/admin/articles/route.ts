@@ -25,7 +25,7 @@ export async function GET(request: Request) {
     // Fetch ALL articles (including archived and unpublished)
     const { data, error } = await supabase
       .from('articles')
-      .select('id, slug, title, author, category, subcategory, created_at, thumbnail_url, status, isPublished, isArchived, isEditorsPick, isBreakingNews')
+      .select('id, slug, title, author, category, subcategory, created_at, updated_at, thumbnail_url, status, isPublished, isArchived, isEditorsPick, isBreakingNews')
       .order('created_at', { ascending: false });
 
     if (error) {
