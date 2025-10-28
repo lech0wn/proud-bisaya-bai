@@ -6,19 +6,22 @@ import Link from "next/link";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-black text-white mt-16">
-      {/* Top section */}
-      <div className="mx-auto max-w-6xl px-4 py-8">
+    <footer
+      className="text-white mt-16 w-full"
+      style={{ backgroundColor: "var(--custom-blue)" }}
+    >
+      {/* Top section - full width edge-to-edge */}
+      <div className="w-full px-4 py-12 md:px-8 lg:px-16">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
           {/* Newsletter */}
           <div>
-            <h3 className="text-2xl font-bold">Newsletter</h3>
-            <p className="mt-1 text-sm text-gray-300">
+            <h3 className="text-2xl font-bold text-white">Newsletter</h3>
+            <p className="mt-1 text-sm text-white/90">
               Subscribe to our newsletter and get updated to our hottest news
             </p>
 
             <form
-              className="mt-4 flex max-w-md"
+              className="mt-4 flex"
               onSubmit={(e) => {
                 e.preventDefault();
                 // TODO: handle newsletter subscribe
@@ -32,7 +35,7 @@ const Footer: React.FC = () => {
               />
               <button
                 type="submit"
-                className="rounded-r-md bg-gray-400 px-4 py-2 text-sm font-semibold text-black hover:bg-gray-300"
+                className="rounded-r-md bg-[var(--custom-orange)] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
               >
                 Join
               </button>
@@ -46,6 +49,7 @@ const Footer: React.FC = () => {
                   alt="Facebook"
                   width={32}
                   height={32}
+                  className="hover:opacity-80 transition-opacity"
                 />
               </Link>
               <Link href="#" aria-label="Instagram">
@@ -54,6 +58,7 @@ const Footer: React.FC = () => {
                   alt="Instagram"
                   width={32}
                   height={32}
+                  className="hover:opacity-80 transition-opacity"
                 />
               </Link>
               <Link href="#" aria-label="Twitter/X">
@@ -62,6 +67,7 @@ const Footer: React.FC = () => {
                   alt="Twitter/X"
                   width={32}
                   height={32}
+                  className="hover:opacity-80 transition-opacity"
                 />
               </Link>
               <Link href="#" aria-label="YouTube">
@@ -70,6 +76,7 @@ const Footer: React.FC = () => {
                   alt="YouTube"
                   width={32}
                   height={32}
+                  className="hover:opacity-80 transition-opacity"
                 />
               </Link>
             </div>
@@ -77,33 +84,45 @@ const Footer: React.FC = () => {
 
           {/* Blogs */}
           <div className="md:mx-auto">
-            <h3 className="text-2xl font-bold">Blogs</h3>
-            <ul className="mt-3 space-y-2 text-gray-300">
+            <h3 className="text-2xl font-bold text-white">Blogs</h3>
+            <ul className="mt-3 space-y-2 text-white/90">
               <li>
                 <Link
                   href="/articles/destinations"
-                  className="hover:text-white"
+                  className="hover:text-[var(--custom-orange)] transition-colors"
                 >
                   Destinations
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white">
-                  Brands & Products
+                <Link
+                  href="/articles/brands-and-products"
+                  className="hover:text-[var(--custom-orange)] transition-colors"
+                >
+                  Brands &amp; Products
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white">
+                <Link
+                  href="/articles/stories"
+                  className="hover:text-[var(--custom-orange)] transition-colors"
+                >
                   Stories
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white">
-                  News & Entertainment
+                <Link
+                  href="/articles/news-and-entertainment"
+                  className="hover:text-[var(--custom-orange)] transition-colors"
+                >
+                  News &amp; Entertainment
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white">
+                <Link
+                  href="/articles/food"
+                  className="hover:text-[var(--custom-orange)] transition-colors"
+                >
                   Food
                 </Link>
               </li>
@@ -112,30 +131,45 @@ const Footer: React.FC = () => {
 
           {/* About */}
           <div className="md:ml-auto">
-            <h3 className="text-2xl font-bold">About</h3>
-            <ul className="mt-3 space-y-2 text-gray-300">
+            <h3 className="text-2xl font-bold text-white">About</h3>
+            <ul className="mt-3 space-y-2 text-white/90">
               <li>
-                <Link href="/about-us" className="hover:text-white">
+                <Link
+                  href="/about-us"
+                  className="hover:text-[var(--custom-orange)] transition-colors"
+                >
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact-us" className="hover:text-white">
+                <Link
+                  href="/contact-us"
+                  className="hover:text-[var(--custom-orange)] transition-colors"
+                >
                   Hire Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact-us" className="hover:text-white">
+                <Link
+                  href="/contact-us"
+                  className="hover:text-[var(--custom-orange)] transition-colors"
+                >
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white">
+                <Link
+                  href="#"
+                  className="hover:text-[var(--custom-orange)] transition-colors"
+                >
                   Privacy &amp; Support
                 </Link>
               </li>
               <li>
-                <Link href="/contact-us" className="hover:text-white">
+                <Link
+                  href="/contact-us"
+                  className="hover:text-[var(--custom-orange)] transition-colors"
+                >
                   Be Featured
                 </Link>
               </li>
@@ -144,10 +178,10 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Divider */}
-        <div className="mt-8 h-px w-full bg-white/20" />
+        <div className="mt-8 h-px w-full bg-white/30" />
 
         {/* Bottom row */}
-        <div className="mt-4 flex flex-col items-start justify-between gap-2 text-xs text-gray-300 sm:flex-row">
+        <div className="mt-4 flex flex-col items-start justify-between gap-2 text-xs text-white/80 sm:flex-row">
           <span>© {new Date().getFullYear()}, Proud Bisaya Bai</span>
           <span>Powered by JSE | All Rights Reserved</span>
         </div>

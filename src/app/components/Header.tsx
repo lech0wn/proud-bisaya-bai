@@ -50,8 +50,8 @@ export default function Navbar({
   return (
     <>
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200">
-        <div className="px-4 py-2 flex items-center justify-between">
+      <div className="fixed top-0 left-0 right-0 z-40 bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)]">
+        <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/home" aria-label="Go to home" title="Home">
               <img
@@ -163,6 +163,16 @@ export default function Navbar({
                     >
                       Get Featured
                     </Link>
+                    {/* Sidebar Ad block */}
+                    <div className="mt-4">
+                      <div className="w-full h-[280px] bg-gray-200 border border-gray-300 rounded-lg flex items-center justify-center">
+                        <span className="text-gray-600 font-semibold">ADS</span>
+                      </div>
+                      {/* Optional small label or caption */}
+                      <p className="mt-2 text-xs text-gray-500 text-center">
+                        Sponsored by ____
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}
