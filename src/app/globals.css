@@ -67,23 +67,3 @@ body {
   border-radius: 8px;
   margin-bottom: 8px;
 }
-
-.gradient-ring {
-  position: relative;
-  z-index: 0;
-}
-
-.gradient-ring::before {
-  content: "";
-  position: absolute;
-  inset: -2px; /* Adjust for ring size */
-  z-index: -1;
-  background: linear-gradient(to right, var(--custom-brown), var(--custom-orange));
-  border-radius: inherit;
-  padding: 2px; /* Matches the ring size */
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
