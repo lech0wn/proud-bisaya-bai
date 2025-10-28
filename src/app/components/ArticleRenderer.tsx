@@ -1,5 +1,7 @@
 "use client";
 
+// TODO: add suggested articles below (Carousel)
+
 import React from "react";
 
 type Article = {
