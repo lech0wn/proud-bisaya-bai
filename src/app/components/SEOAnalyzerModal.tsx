@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 
 interface SEOAnalyzerModalProps {
   open: boolean;
@@ -30,6 +31,8 @@ export default function SEOAnalyzerModal({
     const issues: string[] = [];
     let score = 0;
 
+    const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
+
     const keyword = detectKeyword(content || "");
     if (!keyword) issues.push("No keyword found.");
     else score += 5;
@@ -41,8 +44,8 @@ export default function SEOAnalyzerModal({
       score += 10;
     else issues.push("Meta description length not optimal (120–160 chars).");
 
-    if (content.length > 300) score += 15;
-    else issues.push("Content too short (<300 words).");
+    if (wordCount > 300) score += 15;
+    else issues.push(`Content too short (${wordCount} words, need 300+).`);
 
     const seoScore = Math.round((score / 40) * 100);
     const summary =
@@ -52,10 +55,27 @@ export default function SEOAnalyzerModal({
         ? "Good SEO ⚠️"
         : "Needs Improvement ❌";
 
-    setResult({ keyword, seoScore, summary, issues });
+    setResult({ keyword, seoScore, summary, issues, wordCount });
   };
 
+  useEffect(() => {
+    if (open) analyzeSEO();
+  }, [open]);
+
   if (!open) return null;
+
+  // Determine word count color
+  const getWordCountColor = (count: number) => {
+    if (count < 300) return "text-red-600";
+    if (count < 600) return "text-yellow-600";
+    return "text-green-600";
+  };
+
+  const getWordCountLabel = (count: number) => {
+    if (count < 300) return "Too short";
+    if (count < 600) return "Decent length";
+    return "Well-optimized";
+  };
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
@@ -78,6 +98,7 @@ export default function SEOAnalyzerModal({
           </button>
         ) : (
           <div>
+            {/* Header with keyword and score */}
             <div className="flex justify-between items-center mb-3">
               <p className="text-gray-700">
                 Keyword:{" "}
@@ -86,7 +107,7 @@ export default function SEOAnalyzerModal({
                 </span>
               </p>
               <p
-                className={`font-bold ${
+                className={`font-bold text-lg ${
                   result.seoScore >= 80
                     ? "text-green-600"
                     : result.seoScore >= 60
@@ -97,12 +118,51 @@ export default function SEOAnalyzerModal({
                 {result.seoScore}%
               </p>
             </div>
-            <p className="mb-2">{result.summary}</p>
+
+            {/*  SEO score bar */}
+            <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden mb-3">
+              <div
+                className={`h-3 transition-all duration-500 ${
+                  result.seoScore >= 80
+                    ? "bg-green-500"
+                    : result.seoScore >= 60
+                    ? "bg-yellow-500"
+                    : "bg-red-500"
+                }`}
+                style={{ width: `${result.seoScore}%` }}
+              ></div>
+            </div>
+
+            {/* Summary + Word Count Feedback */}
+            <div className="flex items-center justify-between mb-2">
+              <p className="font-medium text-gray-700">{result.summary}</p>
+              <p
+                className={`font-semibold ${getWordCountColor(
+                  result.wordCount
+                )}`}
+              >
+                {result.wordCount} words{" "}
+                <span className="text-gray-500 text-sm ml-1">
+                  ({getWordCountLabel(result.wordCount)})
+                </span>
+              </p>
+            </div>
+
+            {/* 🔹 List of issues */}
             <ul className="list-disc list-inside text-gray-600 text-sm space-y-1 max-h-40 overflow-y-auto">
               {result.issues.map((issue: string, i: number) => (
                 <li key={i}>{issue}</li>
               ))}
             </ul>
+
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={onClose}
+                className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium transition"
+              >
+                Close
+              </button>
+            </div>
           </div>
         )}
       </div>

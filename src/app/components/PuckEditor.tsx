@@ -28,6 +28,34 @@ export function PuckEditor({
 }: PuckEditorProps) {
   const [showSEO, setShowSEO] = useState(false);
 
+  const extractReadableText = (data: any): string => {
+  if (!data) return "";
+
+  let text = "";
+
+  const traverse = (node: any) => {
+    if (!node) return;
+
+    if (node.props) {
+      const possibleText =
+        node.props.content ||
+        node.props.text ||
+        node.props.children ||
+        node.props.value ||
+        "";
+
+      if (typeof possibleText === "string") text += possibleText + " ";
+    }
+
+    if (Array.isArray(node.content)) node.content.forEach(traverse);
+    if (Array.isArray(node.blocks)) node.blocks.forEach(traverse);
+    if (Array.isArray(node.children)) node.children.forEach(traverse);
+  };
+
+  traverse(data);
+  return text.trim();
+};
+
   return (
     <div className="flex-1 overflow-y-hidden">
       <Puck
@@ -68,14 +96,14 @@ export function PuckEditor({
         }}
       />
 
-     {/* SEO Modal */}
-      <SEOAnalyzerModal
-        open={showSEO}
-        onClose={() => setShowSEO(false)}
-        title={metadata?.title || ""}
-        metaDescription={metadata?.category || ""}
-        content={JSON.stringify(data)}
-      />
+    <SEOAnalyzerModal
+      open={showSEO}
+      onClose={() => setShowSEO(false)}
+      title={metadata?.title || ""}
+      metaDescription={metadata?.category || ""}
+      content={extractReadableText(data)} 
+    />
+
     </div>
   );
 }
