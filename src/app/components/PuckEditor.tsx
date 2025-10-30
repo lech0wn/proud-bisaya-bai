@@ -3,7 +3,7 @@ import type { Config, Data } from "@measured/puck";
 import { title } from "process";
 import React from "react";
 import SEOAnalyzerModal from "./SEOAnalyzerModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface PuckEditorProps {
   config: Config;
@@ -22,11 +22,25 @@ interface PuckEditorProps {
 export function PuckEditor({
   config,
   data,
-  metadata,
+  metadata: metadataProp,
   onPublish,
   onChange,
 }: PuckEditorProps) {
   const [showSEO, setShowSEO] = useState(false);
+  const [metadata, setMetadata] = useState(metadataProp);
+
+    useEffect(() => {
+    if (!metadataProp && typeof window !== "undefined") {
+      const stored = sessionStorage.getItem("articleMetadata");
+      if (stored) {
+        try {
+          setMetadata(JSON.parse(stored));
+        } catch (err) {
+          console.error("Failed to parse stored metadata:", err);
+        }
+      }
+    }
+  }, [metadataProp]);
 
   const extractReadableText = (data: any): string => {
   if (!data) return "";
