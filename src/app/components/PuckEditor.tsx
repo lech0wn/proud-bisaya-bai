@@ -70,6 +70,31 @@ export function PuckEditor({
   return text.trim();
 };
 
+const extractFirstParagraph = (text: string): string => {
+  if (!text) return "";
+
+  // Split into potential paragraphs — double newlines, or two spaces after punctuation.
+  const paragraphs = text
+    .split(/\n\s*\n|(?<=[.?!])\s{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean); // remove empty strings
+
+  // Filter out headings, short intros, and metadata-like lines
+  const meaningfulParagraphs = paragraphs.filter(
+    (p) =>
+      p.length > 40 && // skip short one-liners
+      !/^#{1,6}\s/.test(p) && // skip markdown headings
+      !/^by\s/i.test(p) && // skip author lines
+      !/^(introduction|summary|about)\b/i.test(p) // skip common non-content headers
+  );
+
+  const first = meaningfulParagraphs[0] || paragraphs[0] || "";
+
+  // Truncate if longer than 160 chars
+  return first.length > 160 ? first.slice(0, 157).trim() + "..." : first;
+};
+
+
   return (
     <div className="flex-1 overflow-y-hidden">
       <Puck
@@ -114,7 +139,7 @@ export function PuckEditor({
       open={showSEO}
       onClose={() => setShowSEO(false)}
       title={metadata?.title || ""}
-      metaDescription={metadata?.category || ""}
+      metaDescription={extractFirstParagraph(extractReadableText(data))}
       content={extractReadableText(data)} 
     />
 

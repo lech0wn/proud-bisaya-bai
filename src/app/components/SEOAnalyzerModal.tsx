@@ -29,23 +29,39 @@ export default function SEOAnalyzerModal({
 
   const analyzeSEO = () => {
     const issues: string[] = [];
+    const checks: string[] = [];
     let score = 0;
 
-    const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
+  let combinedText = content.trim();
+  if (!content.startsWith(metaDescription)) {
+    combinedText = `${metaDescription} ${content}`.trim();
+  }
+  const wordCount = combinedText.split(/\s+/).filter(Boolean).length;
+
 
     const keyword = detectKeyword(content || "");
     if (!keyword) issues.push("No keyword found.");
-    else score += 5;
+    else { score += 5; checks.push(`Keyword detected: "${keyword}"`); }
 
-    if (title.length >= 50 && title.length <= 60) score += 10;
-    else issues.push("Title length not optimal (50–60 chars).");
-
-    if (metaDescription.length >= 120 && metaDescription.length <= 160)
+    if (title.length >= 50 && title.length <= 60) {
       score += 10;
-    else issues.push("Meta description length not optimal (120–160 chars).");
+      checks.push(`Title length optimal (${title.length} chars).`);
+    } else issues.push("Title length not optimal (50–60 chars).");
 
-    if (wordCount > 300) score += 15;
-    else issues.push(`Content too short (${wordCount} words, need 300+).`);
+    if (metaDescription.length >= 120 && metaDescription.length <= 160) {
+      score += 10;
+      checks.push(`Meta description optimal (${metaDescription.length} chars).`);
+    } else if (metaDescription.length > 0) {
+      issues.push(`Meta description not optimal (${metaDescription.length} chars).`);
+    } else {
+      issues.push("Missing meta description.");
+    }
+
+
+    if (wordCount >= 300) {
+      score += 15;
+      checks.push(`Content length sufficient (${wordCount} words).`);
+    } else issues.push(`Content too short (${wordCount} words, need 300+).`);
 
     const seoScore = Math.round((score / 40) * 100);
     const summary =
@@ -55,7 +71,7 @@ export default function SEOAnalyzerModal({
         ? "Good SEO ⚠️"
         : "Needs Improvement ❌";
 
-    setResult({ keyword, seoScore, summary, issues, wordCount });
+    setResult({ keyword, seoScore, summary, issues, checks, wordCount, metaDescription});
   };
 
   useEffect(() => {
@@ -99,13 +115,7 @@ export default function SEOAnalyzerModal({
         ) : (
           <div>
             {/* Header with keyword and score */}
-            <div className="flex justify-between items-center mb-3">
-              <p className="text-gray-700">
-                Keyword:{" "}
-                <span className="font-semibold text-blue-600">
-                  {result.keyword || "N/A"}
-                </span>
-              </p>
+            <div className="justify-between items-right mb-3">
               <p
                 className={`font-bold text-lg ${
                   result.seoScore >= 80
@@ -148,12 +158,36 @@ export default function SEOAnalyzerModal({
               </p>
             </div>
 
-            {/* 🔹 List of issues */}
-            <ul className="list-disc list-inside text-gray-600 text-sm space-y-1 max-h-40 overflow-y-auto">
+            {/* List of Checks */}
+            <div className="border-t border-b border-gray-300 py-3 my-3">
+              <h3 className="font-semibold mb-2 text-gray-800">Checks:</h3>
+              <ul className="list-['✅'] list-inside text-emerald-400 text-sm space-y-1">
+                {result.checks && result.checks.length > 0 ? (
+                  result.checks.map((c: string, i: number) => <li key={i}>{c}</li>)
+                ) : (
+                  <li className="text-gray-500">No passed checks yet.</li>
+                )}
+              </ul>
+                {result.metaDescription && (
+                <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <p className="text-sm text-gray-700 mb-1 font-semibold">
+                    Meta Description Preview:
+                  </p>
+                  <p className="text-gray-600 text-sm italic">
+                    {result.metaDescription}
+                  </p>
+                </div>
+              )}
+              </div>
+            {/* List of issues */}
+            <div>
+              <h3 className="font-semibold mb-2 text-gray-800">Issues:</h3>
+            <ul className="list-['❌'] list-inside text-red-600 text-sm space-y-1 max-h-40 overflow-y-auto">
               {result.issues.map((issue: string, i: number) => (
                 <li key={i}>{issue}</li>
               ))}
             </ul>
+            </div>
 
             <div className="flex justify-end mt-4">
               <button
