@@ -18,14 +18,30 @@ export default function SEOAnalyzerModal({
 }: SEOAnalyzerModalProps) {
   const [result, setResult] = useState<any>(null);
 
-  const detectKeyword = (text: string) => {
+const detectKeyword = (text: string) => {
+    const stopWords = new Set([
+      'the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have',
+      'i', 'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you',
+      'do', 'at', 'this', 'but', 'his', 'by', 'from', 'they',
+      'we', 'say', 'her', 'she', 'or', 'an', 'will', 'my', 'one',
+      'all', 'would', 'there', 'their', 'what', 'so', 'up', 'out',
+      'if', 'about', 'who', 'get', 'which', 'go', 'me', 'when',
+      'is', 'was', 'are', 'were', 'am'
+    ]);
+
     const words = text.toLowerCase().match(/\b[a-z]{3,}\b/g);
     if (!words) return null;
+    
     const freq: Record<string, number> = {};
-    words.forEach((w) => (freq[w] = (freq[w] || 0) + 1));
+    words.forEach(w => {
+      if (!stopWords.has(w)) {
+        freq[w] = (freq[w] || 0) + 1;
+      }
+    });
+    
     const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
     return sorted[0]?.[0] || null;
-  };
+};
 
   const analyzeSEO = () => {
     const issues: string[] = [];
