@@ -1,7 +1,5 @@
 "use client";
 
-// TODO: add suggested articles below (Carousel)
-
 import React from "react";
 
 type Article = {
@@ -20,23 +18,37 @@ interface ArticleRendererProps {
   article: Article;
 }
 
+// Component types matching your CustomEditor
+const COMPONENT_TYPES = {
+  HEADING: 'Heading',
+  PARAGRAPH: 'Paragraph',
+  RICH_TEXT: 'TiptapRichText',
+  IMAGE: 'ImageBlock',
+  COLUMNS: 'ColumnBlock'
+};
+
 export default function ArticleRenderer({ article }: ArticleRendererProps) {
-  let puckData;
+  let editorData;
   try {
-    puckData =
+    editorData =
       typeof article.content === "string"
         ? JSON.parse(article.content)
         : article.content;
   } catch (e) {
     console.error("Failed to parse article content:", e);
-    puckData = { content: [] };
+    editorData = { content: [] };
   }
+
+  // Extract content array from either the old Puck format or new CustomEditor format
+  const contentArray = Array.isArray(editorData) 
+    ? editorData 
+    : (editorData.content || []);
 
   const renderComponent = (component: any, index: number) => {
     const { type, props } = component;
 
     switch (type) {
-      case "Heading": {
+      case COMPONENT_TYPES.HEADING: {
         const HeadingTag = `h${props.level || 2}` as
           | "h1"
           | "h2"
@@ -62,14 +74,23 @@ export default function ArticleRenderer({ article }: ArticleRendererProps) {
         );
       }
 
-      case "Paragraph":
+      case COMPONENT_TYPES.PARAGRAPH:
         return (
           <p key={index} className="text-lg leading-relaxed mb-6 text-gray-700">
             {props.text}
           </p>
         );
 
-      case "ImageBlock":
+      case COMPONENT_TYPES.RICH_TEXT:
+        return (
+          <div 
+            key={index}
+            className="prose prose-lg max-w-none mb-6"
+            dangerouslySetInnerHTML={{ __html: props.content || '' }}
+          />
+        );
+
+      case COMPONENT_TYPES.IMAGE:
         return (
           <figure key={index} className="mb-8">
             {props.src && (
@@ -87,7 +108,24 @@ export default function ArticleRenderer({ article }: ArticleRendererProps) {
           </figure>
         );
 
+      case COMPONENT_TYPES.COLUMNS:
+        const columnCount = props.columnCount || 2;
+        const gridCols = columnCount === 2 ? 'grid-cols-2' : columnCount === 3 ? 'grid-cols-3' : 'grid-cols-4';
+        
+        return (
+          <div key={index} className={`grid ${gridCols} gap-6 mb-8`}>
+            {(props.columns || []).map((column: any, colIndex: number) => (
+              <div key={colIndex} className="space-y-4">
+                {column.components && column.components.map((colComponent: any, colCompIndex: number) =>
+                  renderComponent(colComponent, colCompIndex)
+                )}
+              </div>
+            ))}
+          </div>
+        );
+
       default:
+        console.warn(`Unknown component type: ${type}`);
         return null;
     }
   };
@@ -138,8 +176,8 @@ export default function ArticleRenderer({ article }: ArticleRendererProps) {
       </header>
 
       <div className="prose prose-lg max-w-none">
-        {puckData.content && puckData.content.length > 0 ? (
-          puckData.content.map((component: any, index: number) =>
+        {contentArray.length > 0 ? (
+          contentArray.map((component: any, index: number) =>
             renderComponent(component, index)
           )
         ) : (
@@ -149,12 +187,7 @@ export default function ArticleRenderer({ article }: ArticleRendererProps) {
 
       <footer className="mt-16 pt-8 border-t border-gray-200">
         <div className="flex justify-between items-center">
-          {/* <a
-            href="/articles"
-            className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
-          >
-            &larr; Back to Articles
-          </a> */}
+          {/* Back to articles link removed as it's already at the top */}
         </div>
       </footer>
     </article>
