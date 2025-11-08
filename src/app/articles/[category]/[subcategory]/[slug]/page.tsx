@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
 import ArticleRenderer from "@/app/components/ArticleRenderer";
+import SuggestedArticlesCarousel from "@/app/components/SuggestedArticlesCarousel";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 
@@ -47,6 +48,18 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     return notFound();
   }
 
+  // Fetch latest articles for the carousel (excluding current article)
+  const { data: suggestedArticles } = await supabase
+    .from("articles")
+    .select(
+      "id, title, slug, thumbnail_url, created_at, category_slug, subcategory_slug, content, author"
+    )
+    .eq("isPublished", true)
+    .eq("isArchived", false)
+    .neq("id", article.id)
+    .order("created_at", { ascending: false })
+    .limit(10);
+
   return (
     <>
       <Header />
@@ -61,6 +74,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         {/* Main Article Content */}
         <main className="flex-1 bg-white rounded-lg shadow-md p-6">
           <ArticleRenderer article={article} />
+          {suggestedArticles && suggestedArticles.length > 0 && (
+            <SuggestedArticlesCarousel
+              articles={suggestedArticles}
+              currentArticleId={article.id}
+            />
+          )}
         </main>
 
         {/* Right Ad */}

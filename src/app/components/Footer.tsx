@@ -159,7 +159,7 @@ const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/privacy-and-support"
                   className="hover:text-[var(--custom-orange)] transition-colors"
                 >
                   Privacy &amp; Support
