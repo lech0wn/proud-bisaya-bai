@@ -50,7 +50,7 @@ export default function Navbar({
   return (
     <>
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-40 bg-gradient-to-r from-[var(--custom-brown)] to-[var(--custom-orange)]">
+      <div className="fixed top-0 left-0 right-0 z-40 bg-[var(--custom-orange)]">
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/home" aria-label="Go to home" title="Home">
@@ -68,11 +68,11 @@ export default function Navbar({
           <button
             aria-label={isOpen ? "Close menu" : "Open menu"}
             onClick={() => setIsOpen((v) => !v)}
-            className="rounded p-2 text-xl hover:bg-gray-100"
+            className="rounded p-2 text-xl hover:scale-120"
             title={isOpen ? "Close" : "Open"}
           >
             <img
-              src="/images/burger.webp"
+              src="/images/burger_brown.webp"
               alt={isOpen ? "Close menu" : "Open menu"}
               width={30}
               height={30}
@@ -84,16 +84,24 @@ export default function Navbar({
 
       {/* Sidebar Nav */}
       <aside
-        className="fixed top-0 right-0 h-screen z-50 bg-white border-l border-gray-200 shadow-lg"
+        className="fixed top-0 right-0 h-screen z-50 border-l border-gray-200 shadow-lg"
         style={{
           width: isOpen ? 260 : 0,
           overflow: "hidden",
           transition: "width 200ms ease",
+          backgroundImage: "url('/images/pbb_hd_logo.webp')",
+          backgroundSize: "contain",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundColor: "white",
         }}
       >
+        {/* Semi-transparent white overlay */}
+        <div className="absolute inset-0 bg-white opacity-70 pointer-events-none" />
+
         {isOpen && (
-          <div className="flex flex-col h-full">
-            <div className="sticky top-0 z-10 bg-white">
+          <div className="flex flex-col h-full relative z-10">
+            <div className="sticky top-0 z-10 bg-white bg-opacity-90">
               <div className="flex items-center justify-between px-3 py-4 border-b border-gray-200">
                 <span className="text-sm font-semibold text-gray-700">
                   Menu
@@ -101,11 +109,11 @@ export default function Navbar({
                 <button
                   aria-label="Close menu"
                   onClick={() => setIsOpen(false)}
-                  className="rounded p-2 text-xl text-black hover:text-black hover:bg-gray-200"
+                  className="rounded p-2 text-xl text-black hover:text-black hover:scale-120"
                   title="Close"
                 >
                   <img
-                    src="/images/close.webp"
+                    src="/images/close_brown.webp"
                     alt="Close menu"
                     width={20}
                     height={20}
@@ -143,13 +151,10 @@ export default function Navbar({
                       <Link
                         key={item.href}
                         href={item.href}
-                        className="flex items-center gap-2 rounded px-3 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                        className="flex items-center gap-2 rounded px-3 py-2 text-sm text-gray-800 hover:underline"
                         title={`${item.label} (Category)`}
                       >
                         <span className="font-medium">{item.label}</span>
-                        {/* <span className="ml-auto text-[10px] text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
-                          Category
-                        </span> */}
                       </Link>
                     ))}
                   </div>
@@ -163,16 +168,6 @@ export default function Navbar({
                     >
                       Get Featured
                     </Link>
-                    {/* Sidebar Ad block */}
-                    <div className="mt-4">
-                      <div className="w-full h-[280px] bg-gray-200 border border-gray-300 rounded-lg flex items-center justify-center">
-                        <span className="text-gray-600 font-semibold">ADS</span>
-                      </div>
-                      {/* Optional small label or caption */}
-                      <p className="mt-2 text-xs text-gray-500 text-center">
-                        Sponsored by ____
-                      </p>
-                    </div>
                   </div>
                 </div>
               )}

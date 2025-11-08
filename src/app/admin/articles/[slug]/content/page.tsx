@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef, Children } from "react";
-import type { Data, Slot } from "@measured/puck";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { PuckEditor } from "@/app/components/PuckEditor";
 import { LoadingOverlay } from "@/app/components/LoadingOverlay";
 import AdminHeader from "@/app/components/AdminHeader";
-import { config } from "@/app/components/Puck.config";
-
+import { CustomEditor } from "@/app/components/CustomEditor";
+import type { CustomEditorData } from "@/app/components/CustomEditor";
 
 export default function ArticleContentPage() {
     const router = useRouter();
@@ -21,7 +19,7 @@ export default function ArticleContentPage() {
     const [uploading, setUploading] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    const [data, setData] = useState<Data>({
+    const [data, setData] = useState<CustomEditorData>({
         content: [],
         root: { props: {} },
     });
@@ -57,7 +55,7 @@ export default function ArticleContentPage() {
             
             if (savedMetadata) {
                 setMetadata(JSON.parse(savedMetadata));
-            }else{
+            } else {
                 setMetadata({
                 title: article.title,
                 slug: article.slug,
@@ -76,7 +74,22 @@ export default function ArticleContentPage() {
                     typeof article.content === "string"
                     ? JSON.parse(article.content)
                     : article.content;
-                setData(parsedContent);
+                
+                // Ensure the parsed content matches CustomEditorData structure
+                if (parsedContent && Array.isArray(parsedContent.content)) {
+                  setData({
+                    content: parsedContent.content,
+                    root: parsedContent.root || { props: {} }
+                  });
+                } else if (Array.isArray(parsedContent)) {
+                  // Handle case where content is just an array
+                  setData({
+                    content: parsedContent,
+                    root: { props: {} }
+                  });
+                } else {
+                  setData({ content: [], root: { props: {} } });
+                }
                 } catch (e) {
                 console.error("Failed to parse content:", e);
                 setData({ content: [], root: { props: {} } });
@@ -131,7 +144,7 @@ export default function ArticleContentPage() {
         }
     };
 
-    const handleSave = async (puckData: Data) => {
+    const handleSave = async (editorData: CustomEditorData) => {
         if (!metadata) {
         alert("Metadata not found");
         return;
@@ -148,7 +161,7 @@ export default function ArticleContentPage() {
             thumbnail_url: metadata.thumbnail_url || undefined,
             category_slug: metadata.category_slug,
             subcategory_slug: metadata.subcategory_slug || undefined,
-            content: JSON.stringify(puckData),
+            content: JSON.stringify(editorData),
         };
 
         let res;
@@ -199,48 +212,52 @@ export default function ArticleContentPage() {
     }
 
     return (
-        <div>
+        <div className="h-screen flex flex-col">
             <AdminHeader/>
-        <div className="bg-white border-b shadow-sm px-6 py-4">
-            <button
-            onClick={() => router.push(`/admin/articles/${slug}/metadata`)}
-            className="text-blue-600 hover:underline text-sm mb-2 inline-block"
-            >
-            ← Back to Metadata
-            </button>
-            <h1 className="text-2xl text-black font-bold">
-            {isEdit ? "Edit" : "Create"} Content: {metadata.title}
-            </h1>
-            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-800">
-                <strong>💡 How to add images:</strong> Click "Upload Image" button
-                below, select your image, and the URL will be copied to your
-                clipboard. Then paste it into the Image Block's "Image URL" field
-                in the editor.
-            </p>
+            
+            {/* Header Section */}
+            <div className="bg-white border-b shadow-sm px-6 py-4">
+                <button
+                onClick={() => router.push(`/admin/articles/${slug}/metadata`)}
+                className="text-blue-600 hover:underline text-sm mb-2 inline-block"
+                >
+                ← Back to Metadata
+                </button>
+                <h1 className="text-2xl text-black font-bold">
+                {isEdit ? "Edit" : "Create"} Content: {metadata.title}
+                </h1>
+                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-800">
+                    <strong>💡 How to add images:</strong> Click "Upload Image" button
+                    below, select your image, and the URL will be copied to your
+                    clipboard. Then paste it into the Image Block's "Image URL" field
+                    in the editor.
+                </p>
+                </div>
+                <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                {uploading ? "Uploading..." : "📤 Upload Image"}
+                </button>
+                <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                />
             </div>
-            <button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
-            className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-            {uploading ? "Uploading..." : "📤 Upload Image"}
-            </button>
-            <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="hidden"
-            />
-        </div>
-        
-        <PuckEditor
-            config={config}
-            data={data}
-            onPublish={handleSave}
-            onChange={setData}
-        />
+            
+            {/* Custom Editor */}
+            <div className="flex-1">
+                <CustomEditor
+                    data={data}
+                    onChange={setData}
+                    onPublish={handleSave}
+                />
+            </div>
 
             <LoadingOverlay
                 saving={saving}
